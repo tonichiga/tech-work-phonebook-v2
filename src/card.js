@@ -7,11 +7,20 @@ const refs = {
   closeModalBtn: document.querySelector("[data-modal-close]"),
   modal: document.querySelector("[data-modal]"),
   backdrop: document.querySelector(".backdrop"),
+  backdropCreate: document.querySelector(".backdrop.create"),
   inputName: document.querySelector(".modal-form-input.name"),
   inputLastname: document.querySelector(".modal-form-input.lastname"),
   inputNumber: document.querySelector(".modal-form-input.number"),
   inputEmail: document.querySelector(".modal-form-input.email"),
   submitBtn: document.querySelector(".modal-btn-submit"),
+  createBtn: document.querySelector(".create-btn"),
+  createName: document.querySelector(".modal-form-input.name.create"),
+  createLastname: document.querySelector(".modal-form-input.lastname.create"),
+  createNumber: document.querySelector(".modal-form-input.number.create"),
+  createEmail: document.querySelector(".modal-form-input.email.create"),
+  createBtnSave: document.querySelector(".modal-btn-submit.create"),
+  closeBtn: document.querySelector(".close-btn"),
+  closeBtnCreate: document.querySelector(".close-btn.create"),
 };
 
 const array = [];
@@ -22,8 +31,9 @@ const obj = {
   lastname: "",
   number: "",
   email: "",
+  id: `${dataID}`,
 };
-
+console.log(refs.backdropCreate);
 // Забирает данный с LocalStorage
 function getDataFromLS() {
   const parseElement = [];
@@ -48,39 +58,87 @@ function render(arr) {
 
   editBtnFn(arr);
 }
-
+function createContact() {
+  refs.createBtn.addEventListener("click", handlerCreate);
+}
 //После рендеринга слушаем кнопу Edit
-export function editBtnFn() {
+function editBtnFn() {
   const editBtn = document.querySelectorAll(".contact__btn-edit");
   const contact = document.querySelectorAll(".contact");
   editBtn.forEach((btn) => {
     btn.addEventListener("click", handlerEdit, true);
   });
-
-  function handlerEdit(e) {
-    const closeBtn = document.querySelector(".close-btn");
-
-    // Работа с модальным окном для редактирования
-    closeBtn.addEventListener("click", handlerCloseModal);
-    document.addEventListener("keydown", handlerClickCloseModal);
-    refs.backdrop.classList.remove("is-hidden");
-    refs.backdrop.classList.add("is-open");
-    submitBtn();
-
-    //   Получение ID карточки кликая по кнопке
-    if (e.currentTarget.nodeName === "BUTTON") {
-      dataID = e.currentTarget.dataset.id;
-      editItem(dataID);
-    }
-  }
 }
 
 function submitBtn() {
-  obj.name = refs.inputName.value;
-  obj.name = refs.inputLastname.value;
-  obj.name = refs.inputNumber.value;
-  obj.name = refs.inputEmail.value;
-  localStorage.setItem(`${dataID}`, JSON.stringify(obj));
+  refs.submitBtn.addEventListener("click", handlerSubmit);
+  console.log(array);
+  console.log(dataID);
+}
+function handlerEdit(e) {
+  // Работа с модальным окном для редактирования
+  refs.closeBtn.addEventListener("click", handlerCloseModal);
+  document.addEventListener("keydown", handlerClickCloseModal);
+  refs.backdrop.classList.remove("is-hidden");
+  refs.backdrop.classList.add("is-open");
+  submitBtn();
+
+  //   Получение ID карточки кликая по кнопке
+  if (e.currentTarget.nodeName === "BUTTON") {
+    dataID = e.currentTarget.dataset.id;
+    editItem(dataID);
+  }
+}
+
+function handlerCreate(e) {
+  if (e.currentTarget.nodeName === "BUTTON") {
+    refs.backdropCreate.classList.remove("is-hidden");
+    refs.backdropCreate.classList.add("is-open");
+
+    refs.createBtnSave.addEventListener("click", handlerCreateSave);
+    closeCreateModalBtn();
+  }
+}
+function handlerCreateSave(e) {
+  if (e.currentTarget.nodeName === "BUTTON") {
+    dataID = localStorage.length + 1;
+    obj.name = refs.createName.value;
+    obj.lastname = refs.createLastname.value;
+    obj.number = refs.createNumber.value;
+    obj.email = refs.createEmail.value;
+    localStorage.setItem(`${dataID}`, JSON.stringify(obj));
+    closeCreateModal();
+  }
+}
+function closeCreateModal() {
+  refs.backdropCreate.classList.remove("is-open");
+  refs.backdropCreate.classList.add("is-hidden");
+}
+function closeCreateModalBtn() {
+  document.addEventListener("keydown", (e) => {
+    if (e.code === "Escape") {
+      console.log("yes");
+      refs.backdropCreate.classList.remove("is-open");
+      refs.backdropCreate.classList.add("is-hidden");
+    }
+  });
+  refs.closeBtnCreate.addEventListener("click", (e) => {
+    if (e.currentTarget.nodeName === "BUTTON") {
+      refs.backdropCreate.classList.remove("is-open");
+      refs.backdropCreate.classList.add("is-hidden");
+    }
+  });
+}
+
+function handlerSubmit(e) {
+  if (e.currentTarget.nodeName === "BUTTON") {
+    obj.name = refs.inputName.value;
+    obj.lastname = refs.inputLastname.value;
+    obj.number = refs.inputNumber.value;
+    obj.email = refs.inputEmail.value;
+    localStorage.setItem(`${dataID}`, JSON.stringify(obj));
+    handlerCloseModal();
+  }
 }
 // Закрытие модального окна
 function handlerCloseModal() {
@@ -97,18 +155,35 @@ function handlerClickCloseModal(e) {
 function editItem(id) {
   const saveItemFromLS = localStorage.getItem(`${id}`);
   const parseItemFromLS = JSON.parse(saveItemFromLS);
+  console.log(parseItemFromLS);
+  if (parseItemFromLS.name === null) {
+    refs.inputName.value = "";
+  } else if (parseItemFromLS.lastname === null) {
+    refs.inputLastname.value = "";
+  } else if (parseItemFromLS.number === null) {
+    refs.inputNumber.value = "";
+  } else if (parseItemFromLS.email === null) {
+    refs.inputEmail.value = "";
+  }
+
   refs.inputName.value = parseItemFromLS.name;
-  refs.inputLastname.value = parseItemFromLS.lastName;
+  refs.inputLastname.value = parseItemFromLS.lastname;
   refs.inputNumber.value = parseItemFromLS.number;
   refs.inputEmail.value = parseItemFromLS.email;
 
   console.log(parseItemFromLS);
 }
 
-// Вызов первого запроса данный с LS
+// Вызов первого запроса данных с LS
 getDataFromLS();
+
+// Вызов создания контакта
+createContact();
 
 // Для приятного визуала
 setTimeout(() => {
   refs.backdrop.classList.remove("hidden");
+}, 250);
+setTimeout(() => {
+  refs.backdropCreate.classList.remove("hidden");
 }, 250);
