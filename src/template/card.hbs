@@ -1,0 +1,38 @@
+{{#each this}}
+<div class="contact">
+        <h1 class="contact__title">{{name}} {{lastname}}</h1>
+        <div class="contact__btn">
+          <button type="button" class="contact__btn-delete">
+            <i class="material-icons btn">clear</i>
+          </button>
+          <button type="button" class="contact__btn-edit">
+            <i class="material-icons btn">create</i>
+          </button>
+          <button type="button" class="contact__btn-save">
+            <i class="material-icons btn">done</i>
+          </button>
+        </div>
+
+        <ul class="contact__list">
+          <li class="contact__element">
+            <div class="contact__element-name">
+              <p class="contact__element-name__title">Имя</p>
+              <p class="contact__element-name__title">Фамилия</p>
+              <p class="contact__element-name__title">Номер телефона</p>
+              <p class="contact__element-name__title">e-mail</p>
+            </div>
+          </li>
+          <li class="contact__element">
+            <div class="contact__element-second-name">
+              <p class="contact__element-second-name__title">{{name}}</p>
+              <p class="contact__element-second-name__title">{{lastname}}</p>
+              <p class="contact__element-second-name__title">{{number}}</p>
+              <p class="contact__element-second-name__title">
+                {{email}}
+              </p>
+              <p class="hidden">{{id}}</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+{{/each}}
