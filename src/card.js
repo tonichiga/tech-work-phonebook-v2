@@ -25,6 +25,7 @@ const refs = {
   statement: document.querySelector(".statement-backdrop"),
   statementBtnYes: document.querySelector(".statement__btn-yes"),
   statementBtnNo: document.querySelector(".statement__btn-no"),
+  statementTitle: document.querySelector(".statement__title"),
   contactWrapper: document.querySelector(".contact__wrapper"),
 };
 // Глобальные переменные
@@ -38,7 +39,7 @@ const obj = {
   lastname: "",
   number: "",
   email: "",
-  id: Math.floor(Math.random() * 300),
+  id: "",
 };
 // Забирает данный с LocalStorage
 function getDataFromLS() {
@@ -62,6 +63,7 @@ function render(arr) {
   refs.contactWrapper.insertAdjacentHTML("beforeend", markup);
 
   editBtnFn(arr);
+  deleteContact();
 }
 // Открытие модального окна для создания контакта
 function createContact() {
@@ -101,7 +103,7 @@ function handlerCreate(e) {
   if (e.currentTarget.nodeName === "BUTTON") {
     refs.backdropCreate.classList.remove("is-hidden");
     refs.backdropCreate.classList.add("is-open");
-
+    obj.id = Math.floor(Math.random() * 300);
     refs.createBtnSave.addEventListener("click", handlerCreateSave);
     closeCreateModalBtn();
   }
@@ -135,6 +137,7 @@ function handlerSubmit(e) {
 }
 // Закрытие модального окна
 function handlerCloseModal() {
+  refs.statementTitle.textContent = "Вы действительно хотите выйти?";
   refs.statement.classList.remove("hidden-statement");
   refs.statementBtnYes.addEventListener("click", (e) => {
     if (e.currentTarget.nodeName === "BUTTON") {
@@ -156,6 +159,7 @@ function handlerCloseModal() {
 // Реализация закрытия модального окна по кнопке ESC
 function handlerClickCloseModal(e) {
   if (e.code === "Escape") {
+    refs.statementTitle.textContent = "Вы действительно хотите выйти?";
     refs.statement.classList.remove("hidden-statement");
     refs.statementBtnYes.addEventListener("click", (e) => {
       if (e.currentTarget.nodeName === "BUTTON") {
@@ -201,11 +205,16 @@ function editItem(id) {
 function closeCreateModal() {
   refs.backdropCreate.classList.remove("is-open");
   refs.backdropCreate.classList.add("is-hidden");
+  refs.createName.value = "";
+  refs.createLastname.value = "";
+  refs.createNumber.value = "";
+  refs.createEmail.value = "";
 }
 // Реализация закрытия модального окна по кнопке ESC
 function closeCreateModalBtn() {
   document.addEventListener("keydown", (e) => {
     if (e.code === "Escape") {
+      refs.statementTitle.textContent = "Вы действительно хотите выйти?";
       refs.statement.classList.remove("hidden-statement");
       refs.statementBtnYes.addEventListener("click", (e) => {
         if (e.currentTarget.nodeName === "BUTTON") {
@@ -227,6 +236,7 @@ function closeCreateModalBtn() {
   });
   refs.closeBtnCreate.addEventListener("click", (e) => {
     if (e.currentTarget.nodeName === "BUTTON") {
+      refs.statementTitle.textContent = "Вы действительно хотите выйти?";
       refs.statement.classList.remove("hidden-statement");
 
       refs.statementBtnYes.addEventListener("click", (e) => {
@@ -248,6 +258,34 @@ function closeCreateModalBtn() {
     }
   });
 }
+// Логика удаления карточки
+function deleteContact() {
+  const deleteBtn = document.querySelectorAll(".contact__btn-delete");
+  console.log(deleteBtn);
+  deleteBtn.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      if (e.currentTarget.nodeName === "BUTTON") {
+        let removeId = e.currentTarget.dataset.id;
+        refs.statementTitle.textContent = "Вы действительно хотите удалить?";
+        refs.statement.classList.remove("hidden-statement");
+        refs.statementBtnYes.addEventListener("click", (e) => {
+          if (e.currentTarget.nodeName === "BUTTON") {
+            console.log("remove");
+            refs.statement.classList.add("hidden-statement");
+            localStorage.removeItem(removeId);
+            getDataFromLS();
+          }
+        });
+        refs.statementBtnNo.addEventListener("click", (e) => {
+          if (e.currentTarget.nodeName === "BUTTON") {
+            refs.statement.classList.add("hidden-statement");
+          }
+        });
+      }
+    });
+  });
+}
+
 // Вызов первого запроса данных с LS
 getDataFromLS();
 // Вызов создания контакта
