@@ -1,5 +1,6 @@
+// Импорт шаблона
 import templateCard from "./template/card.hbs";
-
+// Ссылки на необходимые элементы
 const refs = {
   container: document.querySelector(".container"),
   edit: document.querySelector(".contact__btn-edit"),
@@ -21,24 +22,29 @@ const refs = {
   createBtnSave: document.querySelector(".modal-btn-submit.create"),
   closeBtn: document.querySelector(".close-btn"),
   closeBtnCreate: document.querySelector(".close-btn.create"),
+  statement: document.querySelector(".statement-backdrop"),
+  statementBtnYes: document.querySelector(".statement__btn-yes"),
+  statementBtnNo: document.querySelector(".statement__btn-no"),
+  contactWrapper: document.querySelector(".contact__wrapper"),
 };
-
-const array = [];
+// Глобальные переменные
+let array = [];
 let dataID = 0;
-
+// Создание первичного объекта
+// Знаю, что Math.random() не подходит для генерации ID, так как есть вероятность совпавшего ID.
+// Как тестовый вариант должно сработать. Позже можно доработать.
 const obj = {
   name: "",
   lastname: "",
   number: "",
   email: "",
-  id: `${dataID}`,
+  id: Math.floor(Math.random() * 300),
 };
-console.log(refs.backdropCreate);
 // Забирает данный с LocalStorage
 function getDataFromLS() {
   const parseElement = [];
-
-  for (let i = 0; i < 100; i += 1) {
+  array = [];
+  for (let i = 0; i < 300; i += 1) {
     parseElement.push(localStorage.getItem(`${[i]}`));
   }
   parseElement.forEach((item) => {
@@ -49,19 +55,19 @@ function getDataFromLS() {
   render(array);
   return array;
 }
-
 // Первичный рендеринг
 function render(arr) {
   const markup = templateCard(arr);
-  // refs.container.innerHTML = "";
-  refs.container.insertAdjacentHTML("beforeend", markup);
+  refs.contactWrapper.innerHTML = "";
+  refs.contactWrapper.insertAdjacentHTML("beforeend", markup);
 
   editBtnFn(arr);
 }
+// Открытие модального окна для создания контакта
 function createContact() {
   refs.createBtn.addEventListener("click", handlerCreate);
 }
-//После рендеринга слушаем кнопу Edit
+// После рендеринга слушаем кнопу Edit
 function editBtnFn() {
   const editBtn = document.querySelectorAll(".contact__btn-edit");
   const contact = document.querySelectorAll(".contact");
@@ -69,12 +75,13 @@ function editBtnFn() {
     btn.addEventListener("click", handlerEdit, true);
   });
 }
-
+// Сохранение созданной карточки
 function submitBtn() {
   refs.submitBtn.addEventListener("click", handlerSubmit);
   console.log(array);
   console.log(dataID);
 }
+// Вызов редактирования карточки
 function handlerEdit(e) {
   // Работа с модальным окном для редактирования
   refs.closeBtn.addEventListener("click", handlerCloseModal);
@@ -89,7 +96,7 @@ function handlerEdit(e) {
     editItem(dataID);
   }
 }
-
+// Открытие окна для создания карточки
 function handlerCreate(e) {
   if (e.currentTarget.nodeName === "BUTTON") {
     refs.backdropCreate.classList.remove("is-hidden");
@@ -99,37 +106,22 @@ function handlerCreate(e) {
     closeCreateModalBtn();
   }
 }
+// Логика создания карточки
 function handlerCreateSave(e) {
   if (e.currentTarget.nodeName === "BUTTON") {
-    dataID = localStorage.length + 1;
+    dataID = obj.id;
     obj.name = refs.createName.value;
     obj.lastname = refs.createLastname.value;
     obj.number = refs.createNumber.value;
     obj.email = refs.createEmail.value;
+
     localStorage.setItem(`${dataID}`, JSON.stringify(obj));
+
     closeCreateModal();
+    getDataFromLS();
   }
 }
-function closeCreateModal() {
-  refs.backdropCreate.classList.remove("is-open");
-  refs.backdropCreate.classList.add("is-hidden");
-}
-function closeCreateModalBtn() {
-  document.addEventListener("keydown", (e) => {
-    if (e.code === "Escape") {
-      console.log("yes");
-      refs.backdropCreate.classList.remove("is-open");
-      refs.backdropCreate.classList.add("is-hidden");
-    }
-  });
-  refs.closeBtnCreate.addEventListener("click", (e) => {
-    if (e.currentTarget.nodeName === "BUTTON") {
-      refs.backdropCreate.classList.remove("is-open");
-      refs.backdropCreate.classList.add("is-hidden");
-    }
-  });
-}
-
+// Логика редактирования карточки
 function handlerSubmit(e) {
   if (e.currentTarget.nodeName === "BUTTON") {
     obj.name = refs.inputName.value;
@@ -137,18 +129,50 @@ function handlerSubmit(e) {
     obj.number = refs.inputNumber.value;
     obj.email = refs.inputEmail.value;
     localStorage.setItem(`${dataID}`, JSON.stringify(obj));
-    handlerCloseModal();
+    refs.backdrop.classList.remove("is-open");
+    refs.backdrop.classList.add("is-hidden");
   }
 }
 // Закрытие модального окна
 function handlerCloseModal() {
-  refs.backdrop.classList.remove("is-open");
-  refs.backdrop.classList.add("is-hidden");
+  refs.statement.classList.remove("hidden-statement");
+  refs.statementBtnYes.addEventListener("click", (e) => {
+    if (e.currentTarget.nodeName === "BUTTON") {
+      refs.backdrop.classList.remove("is-open");
+      refs.backdrop.classList.add("is-hidden");
+      refs.statement.classList.add("hidden-statement");
+      refs.inputName.value = "";
+      refs.inputLastname.value = "";
+      refs.inputNumber.value = "";
+      refs.inputEmail.value = "";
+    }
+  });
+  refs.statementBtnNo.addEventListener("click", (e) => {
+    if (e.currentTarget.nodeName === "BUTTON") {
+      refs.statement.classList.add("hidden-statement");
+    }
+  });
 }
+// Реализация закрытия модального окна по кнопке ESC
 function handlerClickCloseModal(e) {
   if (e.code === "Escape") {
-    refs.backdrop.classList.remove("is-open");
-    refs.backdrop.classList.add("is-hidden");
+    refs.statement.classList.remove("hidden-statement");
+    refs.statementBtnYes.addEventListener("click", (e) => {
+      if (e.currentTarget.nodeName === "BUTTON") {
+        refs.backdrop.classList.remove("is-open");
+        refs.backdrop.classList.add("is-hidden");
+        refs.statement.classList.add("hidden-statement");
+        refs.inputName.value = "";
+        refs.inputLastname.value = "";
+        refs.inputNumber.value = "";
+        refs.inputEmail.value = "";
+      }
+    });
+    refs.statementBtnNo.addEventListener("click", (e) => {
+      if (e.currentTarget.nodeName === "BUTTON") {
+        refs.statement.classList.add("hidden-statement");
+      }
+    });
   }
 }
 // Получение по ID объекта с LS и его редактирование
@@ -173,17 +197,64 @@ function editItem(id) {
 
   console.log(parseItemFromLS);
 }
+// Закрывает окно при нажатии на кнопку Сохранить
+function closeCreateModal() {
+  refs.backdropCreate.classList.remove("is-open");
+  refs.backdropCreate.classList.add("is-hidden");
+}
+// Реализация закрытия модального окна по кнопке ESC
+function closeCreateModalBtn() {
+  document.addEventListener("keydown", (e) => {
+    if (e.code === "Escape") {
+      refs.statement.classList.remove("hidden-statement");
+      refs.statementBtnYes.addEventListener("click", (e) => {
+        if (e.currentTarget.nodeName === "BUTTON") {
+          refs.backdropCreate.classList.remove("is-open");
+          refs.backdropCreate.classList.add("is-hidden");
+          refs.statement.classList.add("hidden-statement");
+          refs.createName.value = "";
+          refs.createLastname.value = "";
+          refs.createNumber.value = "";
+          refs.createEmail.value = "";
+        }
+      });
+      refs.statementBtnNo.addEventListener("click", (e) => {
+        if (e.currentTarget.nodeName === "BUTTON") {
+          refs.statement.classList.add("hidden-statement");
+        }
+      });
+    }
+  });
+  refs.closeBtnCreate.addEventListener("click", (e) => {
+    if (e.currentTarget.nodeName === "BUTTON") {
+      refs.statement.classList.remove("hidden-statement");
 
+      refs.statementBtnYes.addEventListener("click", (e) => {
+        if (e.currentTarget.nodeName === "BUTTON") {
+          refs.backdropCreate.classList.remove("is-open");
+          refs.backdropCreate.classList.add("is-hidden");
+          refs.statement.classList.add("hidden-statement");
+          refs.createName.value = "";
+          refs.createLastname.value = "";
+          refs.createNumber.value = "";
+          refs.createEmail.value = "";
+        }
+      });
+      refs.statementBtnNo.addEventListener("click", (e) => {
+        if (e.currentTarget.nodeName === "BUTTON") {
+          refs.statement.classList.add("hidden-statement");
+        }
+      });
+    }
+  });
+}
 // Вызов первого запроса данных с LS
 getDataFromLS();
-
 // Вызов создания контакта
 createContact();
-
 // Для приятного визуала
 setTimeout(() => {
   refs.backdrop.classList.remove("hidden");
-}, 250);
-setTimeout(() => {
   refs.backdropCreate.classList.remove("hidden");
+  refs.statement.classList.remove("hidden");
 }, 250);

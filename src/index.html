@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Homework 10</title>
+    <title>Tech Work Phonebook</title>
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
@@ -12,8 +12,11 @@
   </head>
   <body>
     <div class="container">
+      <div class="contact__wrapper">
+
+      </div>
       <button type="button" class="create-btn">Создать</button>
-      <div class="contact">
+      <!-- <div class="contact">
         <h1 class="contact__title">Дензел Вашингтон</h1>
         <div class="contact__btn">
           <button type="button" class="contact__btn-delete">
@@ -82,7 +85,7 @@
             </div>
           </li>
         </ul>
-      </div>
+      </div> -->
       <div class="backdrop is-hidden hidden" data-modal>
       <div class="modal-wrapper modal-form">
         <form action="#" class="modal-form1">
@@ -199,14 +202,15 @@
         </form>
       </div>
       </div>
-      <div class="statement">
-        <p>Вы действитель хотите выйти?</p>
-        <div class="statement__wrapper">
+      <div class="statement-backdrop hidden-statement hidden">
+          <div class="statement">
+          <p class="statement__title">Вы действитель хотите выйти?</p>
+          <div class="statement__wrapper">
           <button type="button" class="statement__btn-yes">Да</button>
           <button type="button" class="statement__btn-no">Нет</button>
         </div>
       </div>
+      </div>
     </div>
-    <!-- Модалка -->
   </body>
 </html>
