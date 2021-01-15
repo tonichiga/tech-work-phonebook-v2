@@ -1,5 +1,5 @@
 {
-  "name": "goit-js-hw-13-image-finder",
+  "name": "tech-work-phonebook-v2",
   "version": "1.1.0",
   "description": "",
   "main": "index.js",
@@ -11,13 +11,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tonichiga/goit-js-hw-13-image-finder.git"
+    "url": "git+https://github.com/tonichiga/tech-work-phonebook-v2.git"
   },
   "keywords": [],
-  "author": "Alexander Repeta <tonichiga@gmail.com>",
+  "author": "Anton Chyhariev <tonichiga@gmail.com>",
   "license": "MIT",
- 
-  "homepage": "https://github.com/tonichiga/goit-js-hw-13-image-finder",
+  "homepage": "https://github.com/tonichiga/tech-work-phonebook-v2",
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@babel/plugin-proposal-class-properties": "^7.10.4",
