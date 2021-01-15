@@ -11,11 +11,17 @@
     />
   </head>
   <body>
+   
     <div class="container">
-      <div class="contact__wrapper">
 
+      <div class="wrapper-main-btn">
+       <button type="button" class="create-btn">Создать контакт</button>
+       <button type="button" class="create-btn-clear">Очистить всё</button>
       </div>
-      <button type="button" class="create-btn">Создать</button>
+       
+
+      <div class="contact__wrapper">
+      </div>
       <!-- <div class="contact">
         <h1 class="contact__title">Дензел Вашингтон</h1>
         <div class="contact__btn">
@@ -97,7 +103,7 @@
               class="modal-form-input name"
               required 
               type="text"
-              id="name"
+              id="create-name"
               name="user-name"
               placeholder=" "
             />
@@ -109,7 +115,7 @@
               class="modal-form-input lastname"
               required 
               type="text"
-              id="tel"
+              id="create-tel"
               name="user-tel"
               placeholder=" "
             />
@@ -120,7 +126,7 @@
             <input
               class="modal-form-input number"
               type="text"
-              id="email"
+              id="create-number"
               name="user-email"
               placeholder=" "
             />
@@ -131,7 +137,7 @@
             <input
               class="modal-form-input email"
               type="text"
-              id="email"
+              id="create-email"
               name="user-email"
               placeholder=" "
             />
@@ -178,8 +184,8 @@
             <input
               class="modal-form-input number create"
               type="text"
-              id="email"
-              name="user-email"
+              id="number"
+              name="user-number"
               placeholder=" "
             />
             <label class="modal-label" for="email">Номер телефона</label>

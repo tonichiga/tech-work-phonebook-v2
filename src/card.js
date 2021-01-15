@@ -27,14 +27,17 @@ const refs = {
   statementBtnNo: document.querySelector(".statement__btn-no"),
   statementTitle: document.querySelector(".statement__title"),
   contactWrapper: document.querySelector(".contact__wrapper"),
+  clearAll: document.querySelector(".create-btn-clear"),
 };
 // Глобальные переменные
 let array = [];
 let dataID = 0;
+let fieldInfo = "";
+let fieldName = "";
 // Создание первичного объекта
 // Знаю, что Math.random() не подходит для генерации ID, так как есть вероятность совпавшего ID.
 // Как тестовый вариант должно сработать. Позже можно доработать.
-const obj = {
+let obj = {
   name: "",
   lastname: "",
   number: "",
@@ -53,6 +56,7 @@ function getDataFromLS() {
       array.push(JSON.parse(item));
     }
   });
+
   render(array);
   return array;
 }
@@ -61,9 +65,33 @@ function render(arr) {
   const markup = templateCard(arr);
   refs.contactWrapper.innerHTML = "";
   refs.contactWrapper.insertAdjacentHTML("beforeend", markup);
+  // Удаление незанятых элементов из DOM
+  const contactSecondName = document.querySelectorAll(
+    ".contact__element-second-name__title"
+  );
+  const contactName = document.querySelectorAll(
+    ".contact__element-name__title"
+  );
+  contactSecondName.forEach((arr) => {
+    if (arr.textContent === "") {
+      let titleId = arr.dataset.tid;
+      arr.remove();
+      contactName.forEach((arr) => {
+        if (arr.dataset.tid === titleId) {
+          console.log("yes");
+          arr.remove();
+        }
+      });
+    }
+  });
+
+  // РЕНДЕРИНГ ДОБАВЛЯЕМОГО ПОЛЯ
+
+  // renderAddField(fieldInfo, fieldName);
 
   editBtnFn(arr);
   deleteContact();
+  addField();
 }
 // Открытие модального окна для создания контакта
 function createContact() {
@@ -80,8 +108,6 @@ function editBtnFn() {
 // Сохранение созданной карточки
 function submitBtn() {
   refs.submitBtn.addEventListener("click", handlerSubmit);
-  console.log(array);
-  console.log(dataID);
 }
 // Вызов редактирования карточки
 function handlerEdit(e) {
@@ -130,6 +156,7 @@ function handlerSubmit(e) {
     obj.lastname = refs.inputLastname.value;
     obj.number = refs.inputNumber.value;
     obj.email = refs.inputEmail.value;
+    obj.id = dataID;
     localStorage.setItem(`${dataID}`, JSON.stringify(obj));
     refs.backdrop.classList.remove("is-open");
     refs.backdrop.classList.add("is-hidden");
@@ -183,7 +210,7 @@ function handlerClickCloseModal(e) {
 function editItem(id) {
   const saveItemFromLS = localStorage.getItem(`${id}`);
   const parseItemFromLS = JSON.parse(saveItemFromLS);
-  console.log(parseItemFromLS);
+
   if (parseItemFromLS.name === null) {
     refs.inputName.value = "";
   } else if (parseItemFromLS.lastname === null) {
@@ -198,8 +225,6 @@ function editItem(id) {
   refs.inputLastname.value = parseItemFromLS.lastname;
   refs.inputNumber.value = parseItemFromLS.number;
   refs.inputEmail.value = parseItemFromLS.email;
-
-  console.log(parseItemFromLS);
 }
 // Закрывает окно при нажатии на кнопку Сохранить
 function closeCreateModal() {
@@ -261,7 +286,7 @@ function closeCreateModalBtn() {
 // Логика удаления карточки
 function deleteContact() {
   const deleteBtn = document.querySelectorAll(".contact__btn-delete");
-  console.log(deleteBtn);
+
   deleteBtn.forEach((btn) => {
     btn.addEventListener("click", (e) => {
       if (e.currentTarget.nodeName === "BUTTON") {
@@ -270,7 +295,6 @@ function deleteContact() {
         refs.statement.classList.remove("hidden-statement");
         refs.statementBtnYes.addEventListener("click", (e) => {
           if (e.currentTarget.nodeName === "BUTTON") {
-            console.log("remove");
             refs.statement.classList.add("hidden-statement");
             localStorage.removeItem(removeId);
             getDataFromLS();
@@ -285,11 +309,167 @@ function deleteContact() {
     });
   });
 }
+// Реализация добавления кастомного поля
+function addField() {
+  const addFieldInput = document.querySelectorAll(".field-add-btn");
+  const contactCard = document.querySelectorAll(".contact");
+  const contactElement = document.querySelectorAll(".contact__element");
+  let id = 0;
 
+  // Получения ID карточки
+  addFieldInput.forEach((field) => {
+    field.addEventListener("click", (e) => {
+      if (e.currentTarget.nodeName === "BUTTON") {
+        id = e.currentTarget.dataset.id;
+        // if (field.classList.contains("open")) {
+        //   console.log("YES");
+        //   const createWrapper = document.querySelector(".create-field-wrapper");
+        //   createWrapper.remove();
+        // }
+        field.classList.toggle("open");
+
+        contactCard.forEach((contact) => {
+          const contactId = contact.dataset.id;
+
+          if (Number(contactId) === Number(id)) {
+            contactElement.forEach((element) => {
+              const elementId = element.dataset.id;
+              if (elementId !== undefined) {
+                if (contactId === elementId) {
+                  element.insertAdjacentHTML(
+                    "beforeend",
+                    templateCreateField()
+                  );
+                }
+              }
+            });
+            saveAddDataFromField(id);
+          }
+        });
+      }
+    });
+  });
+}
+function templateCreateField() {
+  let templateField = "";
+  templateField = `<div class="create-field-wrapper ">
+      <select class="create-field-name"> 
+        <option class="create-field-item">Выберите нужный вариант</option> 
+        <option class="create-field-item" value="work">Рабочий адрес</option> 
+        <option class="create-field-item" value="organization">Организация</option> 
+        <option class="create-field-item" value="note" >Заметка</option> 
+      </select>
+      <input type="text" placeholder="Информация" class="create-field-info">  
+      <button type="button" class="create-field-save-btn">Сохранить</button>
+    </div>
+    
+    `;
+  return templateField;
+}
+function saveAddDataFromField(id) {
+  const createFieldSaveBtn = document.querySelector(".create-field-save-btn");
+  const createFieldName = document.querySelector(".create-field-name");
+  const createFieldInfo = document.querySelector(".create-field-info");
+  const contactName = document.querySelectorAll(
+    ".contact__element-second-name__title"
+  );
+  const createField = document.querySelectorAll(".create-field-item");
+  console.dir(createField);
+  contactName.forEach((arr) => {
+    createField.forEach((field) => {
+      if (arr.dataset.tid === "1") {
+        if (field.value === "work") {
+          field.disabled = true;
+        }
+      }
+      if (arr.dataset.tid === "3") {
+        if (field.value === "organization") {
+          field.disabled = true;
+        }
+      }
+      if (arr.dataset.tid === "4") {
+        if (field.value === "note") {
+          field.disabled = true;
+        }
+      }
+    });
+  });
+  // Добавление информации о новом объекте в поле.
+  createFieldSaveBtn.addEventListener("click", (e) => {
+    if (e.currentTarget.nodeName === "BUTTON") {
+      // console.dir(createFieldName);
+      if (createFieldName.value === "note") {
+        fieldName = "Заметка";
+      } else if (createFieldName.value === "home") {
+        fieldName = "Домашний адрес";
+      } else if (createFieldName.value === "work") {
+        fieldName = "Рабочий адрес";
+      } else if (createFieldName.value === "organization") {
+        fieldName = "Организация";
+      }
+      // fieldName = createFieldName.value;
+      fieldInfo = createFieldInfo.value;
+      renderAddField(fieldInfo, fieldName);
+      const saveData = localStorage.getItem(`${id}`);
+      const saveParse = JSON.parse(saveData);
+      obj = saveParse;
+      obj[fieldName] = fieldInfo;
+      localStorage.setItem(`${id}`, JSON.stringify(obj));
+    }
+  });
+}
+// Рендеринг изменений
+function renderAddField(fieldInfo, fieldName) {
+  const contactElementName = document.querySelector(".contact__element-name");
+  const contactElementSecondName = document.querySelector(
+    ".contact__element-second-name"
+  );
+  console.log(fieldName);
+  contactElementName.insertAdjacentHTML(
+    "beforeend",
+    templateAddFieldName(fieldName)
+  );
+  contactElementSecondName.insertAdjacentHTML(
+    "beforeend",
+    templateAddFieldSecondName(fieldInfo)
+  );
+}
+function templateAddFieldName(fieldName) {
+  const tempAddFieldName = `<p class="contact__element-name__title">${fieldName}</p>`;
+  return tempAddFieldName;
+}
+function templateAddFieldSecondName(fieldInfo) {
+  const tempAddFieldSecondName = `<p class="contact__element-second-name__title">${fieldInfo}</p>`;
+  return tempAddFieldSecondName;
+}
 // Вызов первого запроса данных с LS
 getDataFromLS();
 // Вызов создания контакта
 createContact();
+// Очистка LS
+function clearLS() {
+  refs.clearAll.addEventListener("click", (e) => {
+    if (e.currentTarget.nodeName === "BUTTON") {
+      refs.statementTitle.textContent = "Вы действительно хотите ОЧИСТИТЬ ВСЁ?";
+      refs.statement.classList.remove("hidden-statement");
+
+      refs.statementBtnYes.addEventListener("click", (e) => {
+        if (e.currentTarget.nodeName === "BUTTON") {
+          refs.backdropCreate.classList.remove("is-open");
+          refs.backdropCreate.classList.add("is-hidden");
+          refs.statement.classList.add("hidden-statement");
+          localStorage.clear();
+        }
+      });
+      refs.statementBtnNo.addEventListener("click", (e) => {
+        if (e.currentTarget.nodeName === "BUTTON") {
+          refs.statement.classList.add("hidden-statement");
+        }
+      });
+    }
+  });
+}
+clearLS();
 // Для приятного визуала
 setTimeout(() => {
   refs.backdrop.classList.remove("hidden");

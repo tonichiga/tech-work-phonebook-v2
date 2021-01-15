@@ -43,6 +43,7 @@ li {
 .contact__element-name {
   display: inline-block;
   text-align: left;
+  margin-bottom: 20px;
 }
 .contact__list {
   display: flex;
@@ -382,4 +383,54 @@ li {
   opacity: 0;
   transform: scale(1.1);
   pointer-events: none;
+}
+.field-add-btn {
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+}
+.wrapper-main-btn {
+  display: flex;
+  top: 32px;
+  right: 30%;
+  height: 34px;
+  margin: auto;
+  margin-bottom: 30px;
+}
+.create-btn {
+  margin-right: 362px;
+}
+.create-btn,
+.create-btn-clear {
+  border-radius: 4px;
+  width: 120px;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.create-btn:hover,
+.create-btn:focus {
+  background-color: rgb(79, 183, 252);
+}
+.create-btn-clear:hover,
+.create-btn-clear:focus {
+  background-color: rgb(201, 24, 24);
+}
+.create-field-wrapper {
+  position: relative;
+  z-index: 100;
+}
+.create-field-name,
+.create-field-info,
+.create-field-item {
+  height: 40px;
+  width: 300px;
+  padding-left: 20px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  border-color: rgb(79, 183, 252);
+}
+.create-field-name:placeholder-shown,
+.create-field-info:placeholder-shown {
+  padding-left: 20px;
+}
+.btn-remove-field {
 }
