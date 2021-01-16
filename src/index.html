@@ -11,7 +11,15 @@
     />
   </head>
   <body>
-   
+   <header class="header">
+     <div class="container">
+       <div class="header">
+         <a href="./index.html"><h1 class="header__title">Приложение контактов</h1></a>
+         
+        </div>
+     </div>
+   </header>
+   <main>
     <div class="container">
 
       <div class="wrapper-main-btn">
@@ -19,7 +27,13 @@
        <button type="button" class="create-btn-clear">Очистить всё</button>
       </div>
        
-
+      <div class="main__wrapper">
+        <h2 class="main__title">Создание контакта</h2>
+        <p class="main__text">Приложение использует синхронизацию с <b>LocalStorage</b>  для хранения контактов в памяти браузера.
+          Все действия сохраняются и при перезагрузке страницы всё останется, как прежде. 
+        </p>
+        <p class="main__text">Кнопка "Очистить всё", очищает Ваш <b>LocalStorage</b>  на данном ресурсе.</p>
+      </div>
       <div class="contact__wrapper">
       </div>
       <!-- <div class="contact">
@@ -218,5 +232,8 @@
       </div>
       </div>
     </div>
+   </main>
+   <footer></footer>
+    
   </body>
 </html>
