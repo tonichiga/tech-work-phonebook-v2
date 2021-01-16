@@ -33,6 +33,10 @@ const refs = {
   statementTitle: document.querySelector(".statement__title"),
   contactWrapper: document.querySelector(".contact__wrapper"),
   clearAll: document.querySelector(".create-btn-clear"),
+  statementBtnYesClear: document.querySelector(".statement__btn-yes-clear"),
+  statementBtnNoClear: document.querySelector(".statement__btn-no-clear"),
+  statementClear: document.querySelector(".statement-backdrop-clear"),
+  statementTitleClear: document.querySelector(".statement__title.clear"),
 };
 // Глобальные переменные
 let array = [];
@@ -508,22 +512,28 @@ createContact();
 function clearLS() {
   refs.clearAll.addEventListener("click", (e) => {
     if (e.currentTarget.nodeName === "BUTTON") {
-      refs.statementTitle.textContent = "Вы действительно хотите ОЧИСТИТЬ ВСЁ?";
-      refs.statement.classList.remove("hidden-statement");
+      console.log("yes");
+      refs.statementTitleClear.textContent =
+        "Вы действительно хотите ОЧИСТИТЬ ВСЁ?";
+      refs.statementClear.classList.remove("hidden-statement");
+      // refs.statementBtnYes.classList.add("hidden")
 
-      refs.statementBtnYes.addEventListener("click", (e) => {
+      refs.statementBtnYesClear.addEventListener("click", (e) => {
+        console.log("Это Clear в подтверждении");
         if (e.currentTarget.nodeName === "BUTTON") {
+          console.dir(e);
           refs.backdropCreate.classList.remove("is-open");
           refs.backdropCreate.classList.add("is-hidden");
-          refs.statement.classList.add("hidden-statement");
+          refs.statementClear.classList.add("hidden-statement");
           refs.contactWrapper.innerHTML = "";
 
           localStorage.clear();
+          // refs.statementBtnYes.classList.remove("hidden");
         }
       });
-      refs.statementBtnNo.addEventListener("click", (e) => {
+      refs.statementBtnNoClear.addEventListener("click", (e) => {
         if (e.currentTarget.nodeName === "BUTTON") {
-          refs.statement.classList.add("hidden-statement");
+          refs.statementClear.classList.add("hidden-statement");
         }
       });
     }
@@ -535,4 +545,5 @@ setTimeout(() => {
   refs.backdrop.classList.remove("hidden");
   refs.backdropCreate.classList.remove("hidden");
   refs.statement.classList.remove("hidden");
+  refs.statementClear.classList.remove("hidden");
 }, 250);
