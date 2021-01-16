@@ -1,3 +1,8 @@
+// На данный момент функция добавление кастомного поля закомментирована в связи с наличием багов,
+// так как LocalStorage  не совсем База Данных и не особо подходит для этих целей.
+// Можно сделать добавление полей и удаление,
+// но это будет работать только на стороне клиента и при обновлении страницы - исчезнет.
+
 // Импорт шаблона
 import templateCard from "./template/card.hbs";
 // Ссылки на необходимые элементы
@@ -50,8 +55,10 @@ function getDataFromLS() {
   const parseElement = [];
   array = [];
   for (let i = 0; i < 300; i += 1) {
+    // Цикл забора объектов из LS
     parseElement.push(localStorage.getItem(`${[i]}`));
   }
+  // Цикл парсинга
   parseElement.forEach((item) => {
     if (item !== null) {
       array.push(JSON.parse(item));
@@ -64,6 +71,7 @@ function getDataFromLS() {
 // Первичный рендеринг
 function render(arr) {
   const markup = templateCard(arr);
+  // Очистка контейнера перед добавлением (обновление контента)
   refs.contactWrapper.innerHTML = "";
   refs.contactWrapper.insertAdjacentHTML("beforeend", markup);
   // Удаление незанятых элементов из DOM
@@ -73,18 +81,18 @@ function render(arr) {
   const contactName = document.querySelectorAll(
     ".contact__element-name__title"
   );
-  contactSecondName.forEach((arr) => {
-    if (arr.textContent === "") {
-      let titleId = arr.dataset.tid;
-      arr.remove();
-      contactName.forEach((arr) => {
-        if (arr.dataset.tid === titleId) {
-          console.log("yes");
-          arr.remove();
-        }
-      });
-    }
-  });
+  // contactSecondName.forEach((arr) => {
+  //   if (arr.textContent === "") {
+  //     let titleId = arr.dataset.tid;
+  //     arr.remove();
+  //     contactName.forEach((arr) => {
+  //       if (arr.dataset.tid === titleId) {
+  //         console.log("yes");
+  //         arr.remove();
+  //       }
+  //     });
+  //   }
+  // });
 
   // РЕНДЕРИНГ ДОБАВЛЯЕМОГО ПОЛЯ
 
@@ -92,7 +100,7 @@ function render(arr) {
 
   editBtnFn(arr);
   deleteContact();
-  addField();
+  // addField();
 }
 // Открытие модального окна для создания контакта
 function createContact() {
@@ -133,6 +141,10 @@ function handlerCreate(e) {
   if (e.currentTarget.nodeName === "BUTTON") {
     refs.backdropCreate.classList.remove("is-hidden");
     refs.backdropCreate.classList.add("is-open");
+    // Генерация ID не самая удачная, можно поставить Date.now() или подключить плагин,
+    // но из - за особенностей работы с LS,
+    // для быстродействие выбран не большой диапазон рандомных чисел, чтобы бычтрее было
+    // пербирать полученные данные с LS.
     obj.id = Math.floor(Math.random() * 300);
     refs.createBtnSave.addEventListener("click", handlerCreateSave);
     closeCreateModalBtn();
@@ -236,7 +248,7 @@ function handlerClickCloseModal(e) {
     });
   }
 }
-// Получение по ID объекта с LS и его редактирование
+// Получение по ID - объекта с LS и его редактирование
 function editItem(id) {
   const saveItemFromLS = localStorage.getItem(`${id}`);
   const parseItemFromLS = JSON.parse(saveItemFromLS);
@@ -339,152 +351,155 @@ function deleteContact() {
     });
   });
 }
+/////////////////////////////////////////////////////////////////////////////////////
+// Всё что ниже в процессе доработки.
+/////////////////////////////////////////////////////////////////////////////////////
 // Реализация добавления кастомного поля
-function addField() {
-  const addFieldInput = document.querySelectorAll(".field-add-btn");
+// function addField() {
+//   const addFieldInput = document.querySelectorAll(".field-add-btn");
 
-  const contactCard = document.querySelectorAll(".contact");
-  const contactElement = document.querySelectorAll(".contact__element");
-  let id = 0;
+//   const contactCard = document.querySelectorAll(".contact");
+//   const contactElement = document.querySelectorAll(".contact__element");
+//   let id = 0;
 
-  // Получения ID карточки
-  addFieldInput.forEach((field) => {
-    field.addEventListener("click", (e) => {
-      if (e.currentTarget.nodeName === "BUTTON") {
-        idBtn = field.dataset.id;
-        field.disabled = true;
-        id = e.currentTarget.dataset.id;
+//   // Получения ID карточки
+//   addFieldInput.forEach((field) => {
+//     field.addEventListener("click", (e) => {
+//       if (e.currentTarget.nodeName === "BUTTON") {
+//         idBtn = field.dataset.id;
+//         field.disabled = true;
+//         id = e.currentTarget.dataset.id;
 
-        field.classList.toggle("open");
+//         field.classList.toggle("open");
 
-        contactCard.forEach((contact) => {
-          const contactId = contact.dataset.id;
+//         contactCard.forEach((contact) => {
+//           const contactId = contact.dataset.id;
 
-          if (Number(contactId) === Number(id)) {
-            contactElement.forEach((element) => {
-              const elementId = element.dataset.id;
-              if (elementId !== undefined) {
-                if (contactId === elementId) {
-                  element.insertAdjacentHTML(
-                    "beforeend",
-                    templateCreateField()
-                  );
-                  saveAddDataFromField(id);
-                }
-              }
-            });
-          }
-        });
-      }
-    });
-  });
-}
-function templateCreateField() {
-  let templateField = "";
-  templateField = `<div class="create-field-wrapper ">
-      <select class="create-field-name">
-        <option class="create-field-item">Выберите нужный вариант</option>
-        <option class="create-field-item" value="Должность">Должность</option>
-        <option class="create-field-item" value="Организация">Организация</option>
-        <option class="create-field-item" value="Заметка" >Заметка</option>
-      </select>
-      <input type="text" placeholder="Информация" class="create-field-info">
-      <button type="button" class="create-field-save-btn">Сохранить</button>
-      <button type="button" class="create-field-close-btn">Закрыть</button>
-    </div>
+//           if (Number(contactId) === Number(id)) {
+//             contactElement.forEach((element) => {
+//               const elementId = element.dataset.id;
+//               if (elementId !== undefined) {
+//                 if (contactId === elementId) {
+//                   element.insertAdjacentHTML(
+//                     "beforeend",
+//                     templateCreateField()
+//                   );
+//                 }
+//                 saveAddDataFromField(id);
+//               }
+//             });
+//           }
+//         });
+//       }
+//     });
+//   });
+// }
+// function templateCreateField() {
+//   let templateField = "";
+//   templateField = `<div class="create-field-wrapper ">
+//       <select class="create-field-name">
+//         <option class="create-field-item">Выберите нужный вариант</option>
+//         <option class="create-field-item" value="Должность">Должность</option>
+//         <option class="create-field-item" value="Организация">Организация</option>
+//         <option class="create-field-item" value="Заметка" >Заметка</option>
+//       </select>
+//       <input type="text" placeholder="Информация" class="create-field-info">
+//       <button type="button" class="create-field-save-btn">Сохранить</button>
+//       <button type="button" class="create-field-close-btn">Закрыть</button>
+//     </div>
 
-    `;
-  return templateField;
-}
-function saveAddDataFromField(id) {
-  const createFieldSaveBtn = document.querySelector(".create-field-save-btn");
-  const closeFieldInput = document.querySelectorAll(".create-field-close-btn");
-  const createFieldName = document.querySelector(".create-field-name");
-  const createFieldInfo = document.querySelector(".create-field-info");
-  const createWrapper = document.querySelector(".create-field-wrapper");
-  const addFieldInput = document.querySelectorAll(".field-add-btn");
+//     `;
+//   return templateField;
+// }
+// function saveAddDataFromField(id) {
+//   const createFieldSaveBtn = document.querySelector(".create-field-save-btn");
+//   const closeFieldInput = document.querySelectorAll(".create-field-close-btn");
+//   const createFieldName = document.querySelector(".create-field-name");
+//   const createFieldInfo = document.querySelector(".create-field-info");
+//   const createWrapper = document.querySelector(".create-field-wrapper");
+//   const addFieldInput = document.querySelectorAll(".field-add-btn");
 
-  const contactName = document.querySelectorAll(
-    ".contact__element-second-name__title"
-  );
-  const createField = document.querySelectorAll(".create-field-item");
-  console.dir(createField);
-  contactName.forEach((arr) => {
-    createField.forEach((field) => {
-      if (arr.dataset.tid === "1") {
-        if (field.value === "Работа") {
-          field.disabled = true;
-        }
-      }
-      if (arr.dataset.tid === "3") {
-        if (field.value === "Организация") {
-          field.disabled = true;
-        }
-      }
-      if (arr.dataset.tid === "4") {
-        if (field.value === "Заметка") {
-          field.disabled = true;
-        }
-      }
-    });
-  });
-  // Добавление информации о новом объекте в поле.
-  createFieldSaveBtn.addEventListener("click", (e) => {
-    if (e.currentTarget.nodeName === "BUTTON") {
-      fieldName = createFieldName.value;
+//   const contactName = document.querySelectorAll(
+//     ".contact__element-second-name__title"
+//   );
+//   const createField = document.querySelectorAll(".create-field-item");
+//   console.dir(createField);
+//   contactName.forEach((arr) => {
+//     createField.forEach((field) => {
+//       if (arr.dataset.tid === "1") {
+//         if (field.value === "Работа") {
+//           field.disabled = true;
+//         }
+//       }
+//       if (arr.dataset.tid === "3") {
+//         if (field.value === "Организация") {
+//           field.disabled = true;
+//         }
+//       }
+//       if (arr.dataset.tid === "4") {
+//         if (field.value === "Заметка") {
+//           field.disabled = true;
+//         }
+//       }
+//     });
+//   });
+//   // Добавление информации о новом объекте в поле.
+//   createFieldSaveBtn.addEventListener("click", (e) => {
+//     if (e.currentTarget.nodeName === "BUTTON") {
+//       fieldName = createFieldName.value;
 
-      fieldInfo = createFieldInfo.value;
-      const saveData = localStorage.getItem(`${id}`);
-      const saveParse = JSON.parse(saveData);
-      obj = saveParse;
-      obj[fieldName] = fieldInfo;
-      console.log(idBtn);
-      localStorage.setItem(`${idBtn}`, JSON.stringify(obj));
+//       fieldInfo = createFieldInfo.value;
+//       const saveData = localStorage.getItem(`${id}`);
+//       const saveParse = JSON.parse(saveData);
+//       obj = saveParse;
+//       obj[fieldName] = fieldInfo;
+//       console.log(idBtn);
+//       localStorage.setItem(`${idBtn}`, JSON.stringify(obj));
 
-      renderAddField(fieldInfo, fieldName);
-      // render(array);
-    }
-  });
-  closeFieldInput.forEach((close) => {
-    close.addEventListener("click", (e) => {
-      if (e.currentTarget.nodeName === "BUTTON") {
-        createWrapper.remove();
-        addFieldInput.forEach((add) => {
-          console.log(add);
-          add.disabled = false;
-        });
-      }
-    });
-  });
-}
-// Рендеринг изменений
-function renderAddField(fieldInfo, fieldName) {
-  const contactElementName = document.querySelector(".contact__element-name");
-  const contactElement = document.querySelectorAll(".contact");
-  const contactElementSecondName = document.querySelector(
-    ".contact__element-second-name"
-  );
-  contactElement.forEach((contact) => {
-    if (idBtn === contact.dataset.id) {
-      contactElementName.insertAdjacentHTML(
-        "beforeend",
-        templateAddFieldName(fieldName)
-      );
-      contactElementSecondName.insertAdjacentHTML(
-        "beforeend",
-        templateAddFieldSecondName(fieldInfo)
-      );
-    }
-  });
-}
-function templateAddFieldName(fieldName) {
-  const tempAddFieldName = `<p class="contact__element-name__title">${fieldName}</p>`;
-  return tempAddFieldName;
-}
-function templateAddFieldSecondName(fieldInfo) {
-  const tempAddFieldSecondName = `<p class="contact__element-second-name__title">${fieldInfo}</p>`;
-  return tempAddFieldSecondName;
-}
+//       // renderAddField(fieldInfo, fieldName);
+//       // render(array);
+//     }
+//   });
+//   closeFieldInput.forEach((close) => {
+//     close.addEventListener("click", (e) => {
+//       if (e.currentTarget.nodeName === "BUTTON") {
+//         createWrapper.remove();
+//         addFieldInput.forEach((add) => {
+//           console.log(add);
+//           add.disabled = false;
+//         });
+//       }
+//     });
+//   });
+// }
+// // Рендеринг изменений
+// function renderAddField(fieldInfo, fieldName) {
+//   const contactElementName = document.querySelector(".contact__element-name");
+//   const contactElement = document.querySelectorAll(".contact");
+//   const contactElementSecondName = document.querySelector(
+//     ".contact__element-second-name"
+//   );
+//   contactElement.forEach((contact) => {
+//     if (idBtn === contact.dataset.id) {
+//       contactElementName.insertAdjacentHTML(
+//         "beforeend",
+//         templateAddFieldName(fieldName)
+//       );
+//       contactElementSecondName.insertAdjacentHTML(
+//         "beforeend",
+//         templateAddFieldSecondName(fieldInfo)
+//       );
+//     }
+//   });
+// }
+// function templateAddFieldName(fieldName) {
+//   const tempAddFieldName = `<p class="contact__element-name__title">${fieldName}</p>`;
+//   return tempAddFieldName;
+// }
+// function templateAddFieldSecondName(fieldInfo) {
+//   const tempAddFieldSecondName = `<p class="contact__element-second-name__title">${fieldInfo}</p>`;
+//   return tempAddFieldSecondName;
+// }
 // Вызов первого запроса данных с LS
 getDataFromLS();
 // Вызов создания контакта
