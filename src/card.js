@@ -4,7 +4,9 @@
 // но это будет работать только на стороне клиента и при обновлении страницы - исчезнет.
 
 // Импорт шаблона
+
 import templateCard from "./template/card.hbs";
+import templateField from "./template/template-field.hbs";
 // Ссылки на необходимые элементы
 const refs = {
   container: document.querySelector(".container"),
@@ -54,6 +56,26 @@ let idBtn = 0;
 // Как тестовый вариант должно сработать. Позже можно доработать.
 let idField = "";
 let obj = {
+  field1: {
+    value: "",
+    info: "",
+  },
+  field2: {
+    value: "",
+    info: "",
+  },
+  field3: {
+    value: "",
+    info: "",
+  },
+  field4: {
+    value: "",
+    info: "",
+  },
+  field5: {
+    value: "",
+    info: "",
+  },
   name: "",
   lastname: "",
   number: "",
@@ -68,7 +90,7 @@ const templateFieldSecondName = (info) => `
 <p class="contact__element-second-name__title">${info}</p>
 `;
 // Забирает данный с LocalStorage
-function getDataFromLS() {
+function getDataFromLS(id) {
   const parseElement = [];
   array = [];
   for (let i = 0; i < 300; i += 1) {
@@ -82,40 +104,43 @@ function getDataFromLS() {
     }
   });
 
-  render(array);
+  render(array, id);
   return array;
 }
 // Первичный рендеринг
-function render(arr) {
+function render(arr, id) {
+  console.log(arr);
   const markup = templateCard(arr);
-  // Очистка контейнера перед добавлением (обновление контента)
   refs.contactWrapper.innerHTML = "";
   refs.contactWrapper.insertAdjacentHTML("beforeend", markup);
-  const contactElementName = document.querySelector(".contact__element-name");
-  const contactElementSecondName = document.querySelector(
-    ".contact__element-second-name"
-  );
+  // Очистка контейнера перед добавлением (обновление контента)
 
+  const contactElementName = document.querySelectorAll(
+    ".contact__element-name__title"
+  );
+  const contactElementSecondName = document.querySelectorAll(
+    ".contact__element-second-name__title"
+  );
+  const newObj = { ...arr };
   for (let keys in arr) {
     const obj = Object.values(arr[keys]);
     if (typeof obj === "object") {
-      obj.forEach(({ value, info }) => {
-        if (value !== undefined) {
-          contactElementName.insertAdjacentHTML(
-            "beforeend",
-            templateFieldName(value)
-          );
-          contactElementSecondName.insertAdjacentHTML(
-            "beforeend",
-            templateFieldSecondName(info)
-          );
-        }
-      });
     }
   }
-
+  contactElementName.forEach((el) => {
+    if (el.textContent === "") {
+      el.remove();
+    }
+  });
+  contactElementSecondName.forEach((el) => {
+    if (el.textContent === "") {
+      el.remove();
+    }
+  });
   const addFieldBtn = document.querySelectorAll(".field-add-btn.open");
-
+  let idEl = 0;
+  let getSave;
+  let parse;
   addFieldBtn.forEach((btn) => {
     btn.addEventListener("click", handlerAddField);
   });
@@ -123,10 +148,11 @@ function render(arr) {
     if (e.currentTarget.nodeName === "BUTTON") {
       refs.getFieldWrapper.classList.toggle("hidden");
 
-      let id = e.currentTarget.dataset.id;
-      const getSave = localStorage.getItem(`${id}`);
-      const parse = JSON.parse(getSave);
-      submitField(parse, id, arr);
+      idEl = e.currentTarget.dataset.id;
+      getSave = localStorage.getItem(`${idEl}`);
+      parse = JSON.parse(getSave);
+      console.log(idEl);
+      submitField(parse, idEl, arr);
     }
   }
 
@@ -424,28 +450,71 @@ function submitField(parse, id, arr) {
   refs.submitBtnField.addEventListener("click", handlerBtnField);
   function handlerBtnField(e) {
     if (e.currentTarget.nodeName === "BUTTON") {
-      let idField = Math.floor(Math.random() * 300);
-      let idFieldSec = Math.floor(Math.random() * 300);
+      // let idField = Math.floor(Math.random() * 300);
+      // let idFieldSec = Math.floor(Math.random() * 300);
       let name = "";
       let info = "";
 
       name = refs.submitFieldName.value;
       info = refs.submitFieldInfo.value;
-      idField = {
-        [idFieldSec]: {
-          value: "",
-          info: "",
-        },
-      };
-      const object = { ...parse, ...idField };
-
-      object[idFieldSec].value = name;
-      object[idFieldSec].info = info;
+      // idField = {
+      //   field1: {
+      //     value: "",
+      //     info: "",
+      //   },
+      //   field2: {
+      //     value: "",
+      //     info: "",
+      //   },
+      //   field3: {
+      //     value: "",
+      //     info: "",
+      //   },
+      //   field4: {
+      //     value: "",
+      //     info: "",
+      //   },
+      //   field5: {
+      //     value: "",
+      //     info: "",
+      //   },
+      // };
+      const object = { ...parse };
+      console.log("id", id);
+      console.log(parse.field1.value === "");
+      if (parse.field1.value === "") {
+        console.log("сработало");
+        object.field1.value = name;
+      } else if (parse.field2.value === "") {
+        object.field2.value = name;
+      } else if (parse.field3.value === "") {
+        object.field3.value = name;
+      } else if (parse.field4.value === "") {
+        object.field4.value = name;
+      } else if (parse.field5.value === "") {
+        object.field5.value = name;
+      } else {
+        console.log("Ошибка, слишком много полей");
+      }
+      if (parse.field1.info === "") {
+        object.field1.info = info;
+      } else if (parse.field2.info === "") {
+        object.field2.info = info;
+      } else if (parse.field3.info === "") {
+        object.field3.info = info;
+      } else if (parse.field4.info === "") {
+        object.field4.info = info;
+      } else if (parse.field5.info === "") {
+        object.field5.info = info;
+      } else {
+        console.log("Ошибка, слишком много полей");
+      }
       const getJson = JSON.stringify(object);
       console.log(object);
+      console.log(id);
       localStorage.setItem(id, getJson);
 
-      getDataFromLS();
+      getDataFromLS(id);
       return;
     }
   }
