@@ -3,7 +3,7 @@
         <h1 class="contact__title">{{name}} {{lastname}}</h1>
         <div class="contact__btn">
           <button type="button" class="contact__btn-delete" data-id="{{id}}">
-            <i class="material-icons btn">clear</i>
+            <i class="material-icons btn">delete</i>
           </button>
           <button type="button" class="contact__btn-edit"
         data-id="{{id}}">
@@ -21,7 +21,10 @@
               <p class="contact__element-name__title">Фамилия</p>
               <p class="contact__element-name__title">Номер телефона</p>
               <p class="contact__element-name__title">e-mail</p>
-<p class="contact__element-name__title">{{#field1}}{{value}}{{/field1}}</p>
+              
+                <p class="contact__element-name__title">{{#field1}}{{value}}{{/field1}}</p>
+             
+
 <p class="contact__element-name__title">{{#field2}}{{value}}{{/field2}}</p>
 <p class="contact__element-name__title">{{#field3}}{{value}}{{/field3}}</p>
 <p class="contact__element-name__title">{{#field4}}{{value}}{{/field4}}</p>
@@ -35,11 +38,28 @@
               <p class="contact__element-second-name__title">{{lastname}}</p>
               <p class="contact__element-second-name__title">{{number}}</p>
               <p class="contact__element-second-name__title">{{email}}</p>
-              <p class="contact__element-second-name__title">{{#field1}}{{info}}{{/field1}}</p>
-              <p class="contact__element-second-name__title">{{#field2}}{{info}}{{/field2}}</p>
-              <p class="contact__element-second-name__title">{{#field3}}{{info}}{{/field3}}</p>
-              <p class="contact__element-second-name__title">{{#field4}}{{info}}{{/field4}}</p>
-              <p class="contact__element-second-name__title">{{#field5}}{{info}}{{/field5}}</p>
+              <div class="contact__field-wrapper">   
+                <p class="contact__element-second-name__title">{{#field1}}{{info}}{{/field1}}</p>
+                <button type="button" class="btn-edit-name field1"data-id={{id}}><i class="material-icons">edit</i></button>
+              </div>
+              <div class="contact__field-wrapper">   
+                <p class="contact__element-second-name__title">{{#field2}}{{info}}{{/field2}}</p>
+                <button type="button" class="btn-edit-name field2"data-id={{id}}><i class="material-icons">edit</i></button>
+              </div>
+              <div class="contact__field-wrapper">   
+                <p class="contact__element-second-name__title">{{#field3}}{{info}}{{/field3}}</p>
+                <button type="button" class="btn-edit-name field3"data-id={{id}}><i class="material-icons">edit</i></button>
+              </div>
+              <div class="contact__field-wrapper">   
+                <p class="contact__element-second-name__title">{{#field4}}{{info}}{{/field4}}</p>
+                <button type="button" class="btn-edit-name field4"data-id={{id}}><i class="material-icons">edit</i></button>
+              </div>
+              <div class="contact__field-wrapper">   
+                <p class="contact__element-second-name__title">{{#field5}}{{info}}{{/field5}}</p>
+                <button type="button" class="btn-edit-name field5"data-id={{id}}><i class="material-icons">edit</i></button>
+              </div>
+
+             
             </div>
           </li>
         </ul>
