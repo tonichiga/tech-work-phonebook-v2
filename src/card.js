@@ -44,11 +44,6 @@ const refs = {
   submitFieldName: document.querySelector(".create-field-name"),
   submitFieldInfo: document.querySelector(".create-field-info"),
   getFieldWrapper: document.querySelector(".contact__wrapper-create"),
-  submitBtnFieldEdit: document.querySelector(".create-field-save-btn-edit"),
-  submitBtnCloseEdit: document.querySelector(".create-field-close-btn-edit"),
-  submitFieldNameEdit: document.querySelector(".create-field-name-edit"),
-  submitFieldInfoEdit: document.querySelector(".create-field-info-edit"),
-  getFieldWrapperEdit: document.querySelector(".contact__wrapper-create-edit"),
 };
 // Глобальные переменные
 let array = [];
@@ -114,6 +109,7 @@ function getDataFromLS(id) {
 }
 // Первичный рендеринг
 function render(arr, id) {
+  console.log(arr);
   const markup = templateCard(arr);
   refs.contactWrapper.innerHTML = "";
   refs.contactWrapper.insertAdjacentHTML("beforeend", markup);
@@ -131,6 +127,7 @@ function render(arr, id) {
   const contactFieldWrapper = document.querySelectorAll(
     ".contact__field-wrapper"
   );
+  console.log(contactFieldWrapper);
   for (let keys in arr) {
     const obj = Object.values(arr[keys]);
     if (typeof obj === "object") {
@@ -148,6 +145,7 @@ function render(arr, id) {
   // });
   // console.dir(contactFieldWrapper.children);
   contactFieldWrapper.forEach((element) => {
+    console.log();
     element.children.forEach((el) => {
       if (el.nodeName === "P") {
         if (el.textContent === "") {
@@ -177,7 +175,6 @@ function render(arr, id) {
       parse = JSON.parse(getSave);
       refs.submitFieldName.value = "";
       refs.submitFieldInfo.value = "";
-      console.log(idEl);
       submitField(parse, idEl, arr);
     }
   }
@@ -485,6 +482,7 @@ function submitField(parse, id, arr) {
       console.log("id", id);
       console.log(parse.field1.value === "");
       if (parse.field1.value === "") {
+        console.log("сработало");
         object.field1.value = name;
       } else if (parse.field2.value === "") {
         object.field2.value = name;
@@ -514,119 +512,109 @@ function submitField(parse, id, arr) {
       console.log(object);
       console.log(id);
       localStorage.setItem(id, getJson);
-      refs.getFieldWrapper.classList.add("is-hidden");
-      id = 0;
-      getDataFromLS();
+
+      getDataFromLS(id);
       return;
     }
   }
 }
+function editField() {
+  const editBtnField = document.querySelectorAll(".btn-edit-name");
+  editBtnField.forEach((btn) => {
+    btn.addEventListener("click", handlerEdit);
+    function handlerEdit(e) {
+      if (e.currentTarget.nodeName === "BUTTON") {
+        const id = e.currentTarget.dataset.id;
+        const save = localStorage.getItem(id);
+        const parse = JSON.parse(save);
 
-const editBtnField = document.querySelectorAll(".btn-edit-name");
-editBtnField.forEach((btn) => {
-  btn.addEventListener("click", handlerEdit);
-  function handlerEdit(e) {
-    console.log(e);
-    if (e.currentTarget.nodeName === "BUTTON") {
-      console.log("click");
-      const targetId = e.currentTarget.dataset.id;
-      const save = localStorage.getItem(targetId);
-      const parse = JSON.parse(save);
-
-      if (e.currentTarget.classList.contains("field1")) {
-        refs.getFieldWrapperEdit.classList.remove("is-hidden");
-        refs.submitFieldNameEdit.value = parse.field1.value;
-        refs.submitFieldInfoEdit.value = parse.field1.info;
-        refs.submitBtnFieldEdit.addEventListener("click", saveEditField);
-        function saveEditField() {
-          parse.field1.value = refs.submitFieldNameEdit.value;
-          parse.field1.info = refs.submitFieldInfoEdit.value;
-          const str = JSON.stringify(parse);
-          localStorage.setItem(targetId, str);
-          refs.getFieldWrapperEdit.classList.add("is-hidden");
-          refs.submitFieldNameEdit.value = "";
-          refs.submitFieldInfoEdit.value = "";
-          getDataFromLS(targetId);
+        if (e.currentTarget.classList.contains("field1")) {
+          refs.getFieldWrapper.classList.remove("is-hidden");
+          refs.submitFieldName.value = parse.field1.value;
+          refs.submitFieldInfo.value = parse.field1.info;
+          refs.submitBtnField.addEventListener("click", saveEditField);
+          function saveEditField() {
+            parse.field1.value = refs.submitFieldName.value;
+            parse.field1.info = refs.submitFieldInfo.value;
+            const str = JSON.stringify(parse);
+            localStorage.setItem(id, str);
+            refs.getFieldWrapper.classList.add("is-hidden");
+            refs.submitFieldName.value = "";
+            refs.submitFieldInfo.value = "";
+            getDataFromLS(id);
+          }
         }
-      }
-      if (e.currentTarget.classList.contains("field2")) {
-        refs.getFieldWrapperEdit.classList.remove("is-hidden");
-        refs.submitFieldNameEdit.value = parse.field2.value;
-        refs.submitFieldInfoEdit.value = parse.field2.info;
-        refs.submitBtnFieldEdit.addEventListener("click", saveEditField);
-        function saveEditField() {
-          parse.field2.value = refs.submitFieldNameEdit.value;
-          parse.field2.info = refs.submitFieldInfoEdit.value;
-          const str = JSON.stringify(parse);
-          localStorage.setItem(targetId, str);
-          refs.getFieldWrapperEdit.classList.add("is-hidden");
-          refs.submitFieldNameEdit.value = "";
-          refs.submitFieldInfoEdit.value = "";
-          getDataFromLS(targetId);
+        if (e.currentTarget.classList.contains("field2")) {
+          refs.getFieldWrapper.classList.remove("is-hidden");
+          refs.submitFieldName.value = parse.field2.value;
+          refs.submitFieldInfo.value = parse.field2.info;
+          refs.submitBtnField.addEventListener("click", saveEditField);
+          function saveEditField() {
+            parse.field2.value = refs.submitFieldName.value;
+            parse.field2.info = refs.submitFieldInfo.value;
+            const str = JSON.stringify(parse);
+            localStorage.setItem(id, str);
+            refs.getFieldWrapper.classList.add("is-hidden");
+            refs.submitFieldName.value = "";
+            refs.submitFieldInfo.value = "";
+            getDataFromLS(id);
+          }
         }
-      }
-      if (e.currentTarget.classList.contains("field3")) {
-        refs.getFieldWrapperEdit.classList.remove("is-hidden");
-        refs.submitFieldNameEdit.value = parse.field3.value;
-        refs.submitFieldInfoEdit.value = parse.field3.info;
-        refs.submitBtnFieldEdit.addEventListener("click", saveEditField);
-        function saveEditField() {
-          parse.field3.value = refs.submitFieldNameEdit.value;
-          parse.field3.info = refs.submitFieldInfoEdit.value;
-          const str = JSON.stringify(parse);
-          localStorage.setItem(targetId, str);
-          refs.getFieldWrapperEdit.classList.add("is-hidden");
-          refs.submitFieldNameEdit.value = "";
-          refs.submitFieldInfoEdit.value = "";
-          getDataFromLS(targetId);
+        if (e.currentTarget.classList.contains("field3")) {
+          refs.getFieldWrapper.classList.remove("is-hidden");
+          refs.submitFieldName.value = parse.field3.value;
+          refs.submitFieldInfo.value = parse.field3.info;
+          refs.submitBtnField.addEventListener("click", saveEditField);
+          function saveEditField() {
+            parse.field3.value = refs.submitFieldName.value;
+            parse.field3.info = refs.submitFieldInfo.value;
+            const str = JSON.stringify(parse);
+            localStorage.setItem(id, str);
+            refs.getFieldWrapper.classList.add("is-hidden");
+            refs.submitFieldName.value = "";
+            refs.submitFieldInfo.value = "";
+            getDataFromLS(id);
+          }
         }
-      }
-      if (e.currentTarget.classList.contains("field4")) {
-        refs.getFieldWrapperEdit.classList.remove("is-hidden");
-        refs.submitFieldNameEdit.value = parse.field4.value;
-        refs.submitFieldInfoEdit.value = parse.field4.info;
-        refs.submitBtnFieldEdit.addEventListener("click", saveEditField);
-        function saveEditField() {
-          parse.field4.value = refs.submitFieldNameEdit.value;
-          parse.field4.info = refs.submitFieldInfoEdit.value;
-          const str = JSON.stringify(parse);
-          localStorage.setItem(targetId, str);
-          refs.getFieldWrapperEdit.classList.add("is-hidden");
-          refs.submitFieldNameEdit.value = "";
-          refs.submitFieldInfoEdit.value = "";
-          getDataFromLS(targetId);
+        if (e.currentTarget.classList.contains("field4")) {
+          refs.getFieldWrapper.classList.remove("is-hidden");
+          refs.submitFieldName.value = parse.field4.value;
+          refs.submitFieldInfo.value = parse.field4.info;
+          refs.submitBtnField.addEventListener("click", saveEditField);
+          function saveEditField() {
+            parse.field4.value = refs.submitFieldName.value;
+            parse.field4.info = refs.submitFieldInfo.value;
+            const str = JSON.stringify(parse);
+            localStorage.setItem(id, str);
+            refs.getFieldWrapper.classList.add("is-hidden");
+            refs.submitFieldName.value = "";
+            refs.submitFieldInfo.value = "";
+            getDataFromLS(id);
+          }
         }
-      }
-      if (e.currentTarget.classList.contains("field5")) {
-        refs.getFieldWrapperEdit.classList.remove("is-hidden");
-        refs.submitFieldNameEdit.value = parse.field5.value;
-        refs.submitFieldInfoEdit.value = parse.field5.info;
-        refs.submitBtnFieldEdit.addEventListener("click", saveEditField);
-        function saveEditField() {
-          parse.field5.value = refs.submitFieldNameEdit.value;
-          parse.field5.info = refs.submitFieldInfoEdit.value;
-          const str = JSON.stringify(parse);
-          localStorage.setItem(targetId, str);
-          refs.getFieldWrapperEdit.classList.add("is-hidden");
-          refs.submitFieldNameEdit.value = "";
-          refs.submitFieldInfoEdit.value = "";
-          getDataFromLS();
+        if (e.currentTarget.classList.contains("field5")) {
+          refs.getFieldWrapper.classList.remove("is-hidden");
+          refs.submitFieldName.value = parse.field5.value;
+          refs.submitFieldInfo.value = parse.field5.info;
+          refs.submitBtnField.addEventListener("click", saveEditField);
+          function saveEditField() {
+            parse.field5.value = refs.submitFieldName.value;
+            parse.field5.info = refs.submitFieldInfo.value;
+            const str = JSON.stringify(parse);
+            localStorage.setItem(id, str);
+            refs.getFieldWrapper.classList.add("is-hidden");
+            refs.submitFieldName.value = "";
+            refs.submitFieldInfo.value = "";
+            getDataFromLS(id);
+          }
         }
       }
     }
-  }
-});
-
-// Закрывает окно создания кастомного поля
-function closeFieldEdit() {
-  refs.submitBtnCloseEdit.addEventListener("click", handlerClose);
-  function handlerClose(e) {
-    if (e.currentTarget.nodeName === "BUTTON") {
-      refs.getFieldWrapperEdit.classList.add("is-hidden");
-    }
-  }
+  });
 }
-closeFieldEdit();
+
+editField();
+// Закрывает окно создания кастомного поля
 function closeField() {
   refs.submitBtnClose.addEventListener("click", handlerClose);
   function handlerClose(e) {
