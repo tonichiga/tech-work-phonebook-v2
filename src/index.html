@@ -27,20 +27,24 @@
             <p class="create-field-wrapper-title">
               Создать дополнительное поле
             </p>
-            <label>
-              <input
-                type="text"
-                placeholder="Название поля"
-                class="create-field-name"
-              />
-            </label>
-            <label>
-              <input
-                type="text"
-                placeholder="Информация"
-                class="create-field-info"
-              />
-            </label>
+            <form action="">
+              <label>
+                <input
+                  type="text"
+                  placeholder="Название поля"
+                  class="create-field-name"
+                  required
+                />
+              </label>
+              <label>
+                <input
+                  type="text"
+                  placeholder="Информация"
+                  class="create-field-info"
+                  required
+                />
+              </label>
+            </form>
             <button type="button" class="create-field-save-btn">
               Сохранить
             </button>
@@ -52,20 +56,24 @@
         <div class="contact__wrapper-create-edit is-hidden hidden">
           <div class="create-field-wrapper-edit">
             <p class="create-field-wrapper-title">Редактировать поле</p>
-            <label>
-              <input
-                type="text"
-                placeholder="Название поля"
-                class="create-field-name-edit"
-              />
-            </label>
-            <label>
-              <input
-                type="text"
-                placeholder="Информация"
-                class="create-field-info-edit"
-              />
-            </label>
+            <form action="">
+              <label>
+                <input
+                  type="text"
+                  placeholder="Название поля"
+                  class="create-field-name-edit"
+                  required
+                />
+              </label>
+              <label>
+                <input
+                  type="text"
+                  placeholder="Информация"
+                  class="create-field-info-edit"
+                  required
+                />
+              </label>
+            </form>
             <button type="button" class="create-field-save-btn-edit">
               Сохранить
             </button>
@@ -89,6 +97,11 @@
           <p class="main__text">
             Кнопка "Очистить всё", очищает Ваш <b>LocalStorage</b> на данном
             ресурсе.
+          </p>
+          <p class="main__text">
+            Приложение умеет создавать карточки контактов, добавлять
+            пользовательские поля, до 5 едениц, а так же редактировать их, и
+            удалять.
           </p>
         </div>
         <div class="contact__wrapper"></div>

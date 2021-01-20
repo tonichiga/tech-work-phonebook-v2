@@ -1,8 +1,3 @@
-// На данный момент функция добавление кастомного поля закомментирована в связи с наличием багов,
-// так как LocalStorage  не совсем База Данных и не особо подходит для этих целей.
-// Можно сделать добавление полей и удаление,
-// но это будет работать только на стороне клиента и при обновлении страницы - исчезнет.
-
 // Импорт шаблона
 
 import templateCard from "./template/card.hbs";
@@ -473,6 +468,7 @@ function submitField() {
       const parse = JSON.parse(getSave);
       name = refs.submitFieldName.value;
       info = refs.submitFieldInfo.value;
+
       const object = { ...parse };
       // Логика перебора полей - если занят, то запиши в следующий.
       if (parse.field1.value === "") {
@@ -501,11 +497,22 @@ function submitField() {
       } else {
         console.log("Ошибка, слишком много полей");
       }
-      const getJson = JSON.stringify(object);
-      localStorage.setItem(newId, getJson);
-      refs.getFieldWrapper.classList.add("is-hidden");
+      // Проверка на пустые инпуты
+      if (
+        refs.submitFieldName.value === "" ||
+        refs.submitFieldInfo.value === ""
+      ) {
+        refs.submitFieldName.style.border = "solid 2px";
+        refs.submitFieldName.style.borderColor = "rgb(255, 0, 0)";
+        refs.submitFieldInfo.style.border = "solid 2px";
+        refs.submitFieldInfo.style.borderColor = "rgb(255, 0, 0)";
+      } else {
+        const getJson = JSON.stringify(object);
+        localStorage.setItem(newId, getJson);
+        refs.getFieldWrapper.classList.add("is-hidden");
 
-      getDataFromLS();
+        getDataFromLS();
+      }
     }
   }
 }
@@ -562,12 +569,22 @@ function saveEditField1(parse, targetId) {
     if (e.currentTarget.nodeName === "BUTTON") {
       parse.field1.value = refs.submitFieldNameEdit.value;
       parse.field1.info = refs.submitFieldInfoEdit.value;
-      const str = JSON.stringify(parse);
-      localStorage.setItem(targetId, str);
-      console.log(parse.field1.value);
-      console.log(str);
-      refs.getFieldWrapperEdit.classList.add("is-hidden");
-      location.reload();
+      if (
+        refs.submitFieldNameEdit.value === "" ||
+        refs.submitFieldInfoEdit.value === ""
+      ) {
+        refs.submitFieldNameEdit.style.border = "solid 2px";
+        refs.submitFieldNameEdit.style.borderColor = "rgb(255, 0, 0)";
+        refs.submitFieldInfoEdit.style.border = "solid 2px";
+        refs.submitFieldInfoEdit.style.borderColor = "rgb(255, 0, 0)";
+      } else {
+        const str = JSON.stringify(parse);
+        localStorage.setItem(targetId, str);
+        console.log(parse.field1.value);
+        console.log(str);
+        refs.getFieldWrapperEdit.classList.add("is-hidden");
+        location.reload();
+      }
     }
   }
   return;
@@ -579,12 +596,22 @@ function saveEditField2(parse, targetId) {
     if (e.currentTarget.nodeName === "BUTTON") {
       parse.field2.value = refs.submitFieldNameEdit.value;
       parse.field2.info = refs.submitFieldInfoEdit.value;
-      const str = JSON.stringify(parse);
-      localStorage.setItem(targetId, str);
-      console.log(parse.field2.value);
-      console.log(str);
-      refs.getFieldWrapperEdit.classList.add("is-hidden");
-      location.reload();
+      if (
+        refs.submitFieldNameEdit.value === "" ||
+        refs.submitFieldInfoEdit.value === ""
+      ) {
+        refs.submitFieldNameEdit.style.border = "solid 2px";
+        refs.submitFieldNameEdit.style.borderColor = "rgb(255, 0, 0)";
+        refs.submitFieldInfoEdit.style.border = "solid 2px";
+        refs.submitFieldInfoEdit.style.borderColor = "rgb(255, 0, 0)";
+      } else {
+        const str = JSON.stringify(parse);
+        localStorage.setItem(targetId, str);
+        console.log(parse.field2.value);
+        console.log(str);
+        refs.getFieldWrapperEdit.classList.add("is-hidden");
+        location.reload();
+      }
     }
   }
   return;
@@ -596,12 +623,22 @@ function saveEditField3(parse, targetId) {
     if (e.currentTarget.nodeName === "BUTTON") {
       parse.field3.value = refs.submitFieldNameEdit.value;
       parse.field3.info = refs.submitFieldInfoEdit.value;
-      const str = JSON.stringify(parse);
-      localStorage.setItem(targetId, str);
-      console.log(parse.field3.value);
-      console.log(str);
-      refs.getFieldWrapperEdit.classList.add("is-hidden");
-      location.reload();
+      if (
+        refs.submitFieldNameEdit.value === "" ||
+        refs.submitFieldInfoEdit.value === ""
+      ) {
+        refs.submitFieldNameEdit.style.border = "solid 2px";
+        refs.submitFieldNameEdit.style.borderColor = "rgb(255, 0, 0)";
+        refs.submitFieldInfoEdit.style.border = "solid 2px";
+        refs.submitFieldInfoEdit.style.borderColor = "rgb(255, 0, 0)";
+      } else {
+        const str = JSON.stringify(parse);
+        localStorage.setItem(targetId, str);
+        console.log(parse.field3.value);
+        console.log(str);
+        refs.getFieldWrapperEdit.classList.add("is-hidden");
+        location.reload();
+      }
     }
   }
   return;
@@ -613,12 +650,22 @@ function saveEditField4(parse, targetId) {
     if (e.currentTarget.nodeName === "BUTTON") {
       parse.field4.value = refs.submitFieldNameEdit.value;
       parse.field4.info = refs.submitFieldInfoEdit.value;
-      const str = JSON.stringify(parse);
-      localStorage.setItem(targetId, str);
-      console.log(parse.field4.value);
-      console.log(str);
-      refs.getFieldWrapperEdit.classList.add("is-hidden");
-      location.reload();
+      if (
+        refs.submitFieldNameEdit.value === "" ||
+        refs.submitFieldInfoEdit.value === ""
+      ) {
+        refs.submitFieldNameEdit.style.border = "solid 2px";
+        refs.submitFieldNameEdit.style.borderColor = "rgb(255, 0, 0)";
+        refs.submitFieldInfoEdit.style.border = "solid 2px";
+        refs.submitFieldInfoEdit.style.borderColor = "rgb(255, 0, 0)";
+      } else {
+        const str = JSON.stringify(parse);
+        localStorage.setItem(targetId, str);
+        console.log(parse.field4.value);
+        console.log(str);
+        refs.getFieldWrapperEdit.classList.add("is-hidden");
+        location.reload();
+      }
     }
   }
   return;
@@ -630,12 +677,22 @@ function saveEditField5(parse, targetId) {
     if (e.currentTarget.nodeName === "BUTTON") {
       parse.field5.value = refs.submitFieldNameEdit.value;
       parse.field5.info = refs.submitFieldInfoEdit.value;
-      const str = JSON.stringify(parse);
-      localStorage.setItem(targetId, str);
-      console.log(parse.field5.value);
-      console.log(str);
-      refs.getFieldWrapperEdit.classList.add("is-hidden");
-      location.reload();
+      if (
+        refs.submitFieldNameEdit.value === "" ||
+        refs.submitFieldInfoEdit.value === ""
+      ) {
+        refs.submitFieldNameEdit.style.border = "solid 2px";
+        refs.submitFieldNameEdit.style.borderColor = "rgb(255, 0, 0)";
+        refs.submitFieldInfoEdit.style.border = "solid 2px";
+        refs.submitFieldInfoEdit.style.borderColor = "rgb(255, 0, 0)";
+      } else {
+        const str = JSON.stringify(parse);
+        localStorage.setItem(targetId, str);
+        console.log(parse.field5.value);
+        console.log(str);
+        refs.getFieldWrapperEdit.classList.add("is-hidden");
+        location.reload();
+      }
     }
   }
   return;
@@ -646,25 +703,34 @@ function deleteField1() {
   function handlerDeleteField(e) {
     if (e.target.parentNode.nodeName === "BUTTON") {
       if (e.target.parentNode.classList.contains("btn-delete-name")) {
+        deleteId = e.target.parentNode.dataset.id;
         const arr = e.target.parentNode.classList;
         if (arr.contains("field1")) {
-          // Получает ID карточки
-          deleteId = e.target.parentNode.dataset.id;
-          // Получает данные
-          const toSave = localStorage.getItem(deleteId);
-          // Парсит
-          const toParse = JSON.parse(toSave);
-          // Добавляет пустое свойство в ключ
-          toParse.field1.value = "";
-          toParse.field1.info = "";
-          // Форматирует в JSON
-          const toStr = JSON.stringify(toParse);
-          // Отправляетв в LS
-          localStorage.setItem(deleteId, toStr);
-          // Перезагруджает страницу для рендеринга
-          location.reload();
+          refs.statementTitle.textContent = "Вы действительно хотите удалить?";
+          refs.statement.classList.remove("hidden-statement");
+
+          refs.statementBtnYes.addEventListener("click", (e) => {
+            if (e.currentTarget.nodeName === "BUTTON") {
+              refs.backdropCreate.classList.remove("is-open");
+              refs.backdropCreate.classList.add("is-hidden");
+              refs.statement.classList.add("hidden-statement");
+
+              const toSave = localStorage.getItem(deleteId);
+              const toParse = JSON.parse(toSave);
+              toParse.field1.value = "";
+              toParse.field1.info = "";
+              const toStr = JSON.stringify(toParse);
+              localStorage.setItem(deleteId, toStr);
+              location.reload();
+            }
+          });
         }
       }
+      refs.statementBtnNo.addEventListener("click", (e) => {
+        if (e.currentTarget.nodeName === "BUTTON") {
+          refs.statement.classList.add("hidden-statement");
+        }
+      });
     }
   }
 }
@@ -674,18 +740,34 @@ function deleteField2() {
   function handlerDeleteField(e) {
     if (e.target.parentNode.nodeName === "BUTTON") {
       if (e.target.parentNode.classList.contains("btn-delete-name")) {
+        deleteId = e.target.parentNode.dataset.id;
         const arr = e.target.parentNode.classList;
         if (arr.contains("field2")) {
-          deleteId = e.target.parentNode.dataset.id;
-          const toSave = localStorage.getItem(deleteId);
-          const toParse = JSON.parse(toSave);
-          toParse.field2.value = "";
-          toParse.field2.info = "";
-          const toStr = JSON.stringify(toParse);
-          localStorage.setItem(deleteId, toStr);
-          location.reload();
+          refs.statementTitle.textContent = "Вы действительно хотите удалить?";
+          refs.statement.classList.remove("hidden-statement");
+
+          refs.statementBtnYes.addEventListener("click", (e) => {
+            if (e.currentTarget.nodeName === "BUTTON") {
+              refs.backdropCreate.classList.remove("is-open");
+              refs.backdropCreate.classList.add("is-hidden");
+              refs.statement.classList.add("hidden-statement");
+
+              const toSave = localStorage.getItem(deleteId);
+              const toParse = JSON.parse(toSave);
+              toParse.field2.value = "";
+              toParse.field2.info = "";
+              const toStr = JSON.stringify(toParse);
+              localStorage.setItem(deleteId, toStr);
+              location.reload();
+            }
+          });
         }
       }
+      refs.statementBtnNo.addEventListener("click", (e) => {
+        if (e.currentTarget.nodeName === "BUTTON") {
+          refs.statement.classList.add("hidden-statement");
+        }
+      });
     }
   }
 }
@@ -695,18 +777,34 @@ function deleteField3() {
   function handlerDeleteField(e) {
     if (e.target.parentNode.nodeName === "BUTTON") {
       if (e.target.parentNode.classList.contains("btn-delete-name")) {
+        deleteId = e.target.parentNode.dataset.id;
         const arr = e.target.parentNode.classList;
         if (arr.contains("field3")) {
-          deleteId = e.target.parentNode.dataset.id;
-          const toSave = localStorage.getItem(deleteId);
-          const toParse = JSON.parse(toSave);
-          toParse.field3.value = "";
-          toParse.field3.info = "";
-          const toStr = JSON.stringify(toParse);
-          localStorage.setItem(deleteId, toStr);
-          location.reload();
+          refs.statementTitle.textContent = "Вы действительно хотите удалить?";
+          refs.statement.classList.remove("hidden-statement");
+
+          refs.statementBtnYes.addEventListener("click", (e) => {
+            if (e.currentTarget.nodeName === "BUTTON") {
+              refs.backdropCreate.classList.remove("is-open");
+              refs.backdropCreate.classList.add("is-hidden");
+              refs.statement.classList.add("hidden-statement");
+
+              const toSave = localStorage.getItem(deleteId);
+              const toParse = JSON.parse(toSave);
+              toParse.field3.value = "";
+              toParse.field3.info = "";
+              const toStr = JSON.stringify(toParse);
+              localStorage.setItem(deleteId, toStr);
+              location.reload();
+            }
+          });
         }
       }
+      refs.statementBtnNo.addEventListener("click", (e) => {
+        if (e.currentTarget.nodeName === "BUTTON") {
+          refs.statement.classList.add("hidden-statement");
+        }
+      });
     }
   }
 }
@@ -716,18 +814,34 @@ function deleteField4() {
   function handlerDeleteField(e) {
     if (e.target.parentNode.nodeName === "BUTTON") {
       if (e.target.parentNode.classList.contains("btn-delete-name")) {
+        deleteId = e.target.parentNode.dataset.id;
         const arr = e.target.parentNode.classList;
         if (arr.contains("field4")) {
-          deleteId = e.target.parentNode.dataset.id;
-          const toSave = localStorage.getItem(deleteId);
-          const toParse = JSON.parse(toSave);
-          toParse.field4.value = "";
-          toParse.field4.info = "";
-          const toStr = JSON.stringify(toParse);
-          localStorage.setItem(deleteId, toStr);
-          location.reload();
+          refs.statementTitle.textContent = "Вы действительно хотите удалить?";
+          refs.statement.classList.remove("hidden-statement");
+
+          refs.statementBtnYes.addEventListener("click", (e) => {
+            if (e.currentTarget.nodeName === "BUTTON") {
+              refs.backdropCreate.classList.remove("is-open");
+              refs.backdropCreate.classList.add("is-hidden");
+              refs.statement.classList.add("hidden-statement");
+
+              const toSave = localStorage.getItem(deleteId);
+              const toParse = JSON.parse(toSave);
+              toParse.field4.value = "";
+              toParse.field4.info = "";
+              const toStr = JSON.stringify(toParse);
+              localStorage.setItem(deleteId, toStr);
+              location.reload();
+            }
+          });
         }
       }
+      refs.statementBtnNo.addEventListener("click", (e) => {
+        if (e.currentTarget.nodeName === "BUTTON") {
+          refs.statement.classList.add("hidden-statement");
+        }
+      });
     }
   }
 }
@@ -738,17 +852,33 @@ function deleteField5() {
     if (e.target.parentNode.nodeName === "BUTTON") {
       if (e.target.parentNode.classList.contains("btn-delete-name")) {
         const arr = e.target.parentNode.classList;
+        deleteId = e.target.parentNode.dataset.id;
         if (arr.contains("field5")) {
-          deleteId = e.target.parentNode.dataset.id;
-          const toSave = localStorage.getItem(deleteId);
-          const toParse = JSON.parse(toSave);
-          toParse.field5.value = "";
-          toParse.field5.info = "";
-          const toStr = JSON.stringify(toParse);
-          localStorage.setItem(deleteId, toStr);
-          location.reload();
+          refs.statementTitle.textContent = "Вы действительно хотите удалить?";
+          refs.statement.classList.remove("hidden-statement");
+
+          refs.statementBtnYes.addEventListener("click", (e) => {
+            if (e.currentTarget.nodeName === "BUTTON") {
+              refs.backdropCreate.classList.remove("is-open");
+              refs.backdropCreate.classList.add("is-hidden");
+              refs.statement.classList.add("hidden-statement");
+
+              const toSave = localStorage.getItem(deleteId);
+              const toParse = JSON.parse(toSave);
+              toParse.field5.value = "";
+              toParse.field5.info = "";
+              const toStr = JSON.stringify(toParse);
+              localStorage.setItem(deleteId, toStr);
+              location.reload();
+            }
+          });
         }
       }
+      refs.statementBtnNo.addEventListener("click", (e) => {
+        if (e.currentTarget.nodeName === "BUTTON") {
+          refs.statement.classList.add("hidden-statement");
+        }
+      });
     }
   }
 }
@@ -773,7 +903,25 @@ function closeFieldEdit() {
   }
 }
 closeFieldEdit();
-//
+// Подтверждение удаления
+function confirmDeleteEsc() {
+  if (e.code === "Escape") {
+    refs.statementTitle.textContent = "Вы действительно хотите выйти?";
+    refs.statement.classList.remove("hidden-statement");
+  }
+  refs.statementBtnYes.addEventListener("click", (e) => {
+    if (e.currentTarget.nodeName === "BUTTON") {
+      refs.backdropCreate.classList.remove("is-open");
+      refs.backdropCreate.classList.add("is-hidden");
+      refs.statement.classList.add("hidden-statement");
+    }
+  });
+  refs.statementBtnNo.addEventListener("click", (e) => {
+    if (e.currentTarget.nodeName === "BUTTON") {
+      refs.statement.classList.add("hidden-statement");
+    }
+  });
+}
 
 clearLS();
 // Для приятного визуала
