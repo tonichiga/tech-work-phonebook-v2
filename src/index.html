@@ -21,7 +21,7 @@
    </header>
    <main>
     <div class="container">
-      <div class="contact__wrapper-create  " >
+      <div class="contact__wrapper-create is-hidden " >
         <div class="create-field-wrapper ">
           <label>
        <input type="text" placeholder="Название поля" class="create-field-name">
@@ -32,7 +32,17 @@
        <button type="button" class="create-field-close-btn">Закрыть</button>
      </div>
       </div>
-      
+      <div class="contact__wrapper-create-edit is-hidden " >
+        <div class="create-field-wrapper-edit ">
+          <label>
+       <input type="text" placeholder="Название поля" class="create-field-name-edit">
+       <input type="text" placeholder="Информация" class="create-field-info-edit">
+          </label>
+
+=       <button type="button" class="create-field-save-btn-edit">Save</button>
+       <button type="button" class="create-field-close-btn-edit">Закрыть</button>
+     </div>
+      </div>
       <div class="wrapper-main-btn">
        <button type="button" class="create-btn">Создать контакт</button>
        <button type="button" class="create-btn-clear">Очистить всё</button>
@@ -60,7 +70,6 @@
             <i class="material-icons btn">done</i>
           </button>
         </div>
-
         <ul class="contact__list">
           <li class="contact__element">
             <div class="contact__element-name">
@@ -95,7 +104,6 @@
             <i class="material-icons btn">done</i>
           </button>
         </div>
-
         <ul class="contact__list">
           <li class="contact__element">
             <div class="contact__element-name">

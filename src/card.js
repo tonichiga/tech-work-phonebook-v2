@@ -44,6 +44,13 @@ const refs = {
   submitFieldName: document.querySelector(".create-field-name"),
   submitFieldInfo: document.querySelector(".create-field-info"),
   getFieldWrapper: document.querySelector(".contact__wrapper-create"),
+  submitBtnSaveEdit: document.querySelector(".create-field-save-btn-edit"),
+  contactList: document.querySelector(".contact__list"),
+  submitBtnFieldEdit: document.querySelector(".create-field-save-btn-edit"),
+  submitBtnCloseEdit: document.querySelector(".create-field-close-btn-edit"),
+  submitFieldNameEdit: document.querySelector(".create-field-name-edit"),
+  submitFieldInfoEdit: document.querySelector(".create-field-info-edit"),
+  getFieldWrapperEdit: document.querySelector(".contact__wrapper-create-edit"),
 };
 // Глобальные переменные
 let newId;
@@ -106,11 +113,9 @@ function getDataFromLS() {
   });
 
   render(array);
-  return array;
 }
 // Первичный рендеринг
 function render(arr) {
-  console.log(arr);
   const markup = templateCard(arr);
   refs.contactWrapper.innerHTML = "";
   refs.contactWrapper.insertAdjacentHTML("beforeend", markup);
@@ -128,7 +133,6 @@ function render(arr) {
   const contactFieldWrapper = document.querySelectorAll(
     ".contact__field-wrapper"
   );
-  console.log(contactFieldWrapper);
   for (let keys in arr) {
     const obj = Object.values(arr[keys]);
     if (typeof obj === "object") {
@@ -139,14 +143,8 @@ function render(arr) {
       el.remove();
     }
   });
-  // contactElementSecondName.forEach((el) => {
-  //   if (el.textContent === "") {
-  //     el.remove();
-  //   }
-  // });
-  // console.dir(contactFieldWrapper.children);
+
   contactFieldWrapper.forEach((element) => {
-    console.log();
     element.children.forEach((el) => {
       if (el.nodeName === "P") {
         if (el.textContent === "") {
@@ -166,16 +164,17 @@ function render(arr) {
   });
   function handlerAddField(e) {
     if (e.currentTarget.nodeName === "BUTTON") {
-      refs.getFieldWrapper.classList.toggle("hidden");
+      refs.getFieldWrapper.classList.remove("is-hidden");
 
       newId = e.currentTarget.dataset.id;
-
-      console.log(newId);
+      refs.submitFieldName.value = "";
+      refs.submitFieldInfo.value = "";
     }
   }
 
   editBtnFn(arr);
   deleteContact();
+  submitEdit();
 }
 // Открытие модального окна для создания контакта
 function createContact() {
@@ -196,7 +195,6 @@ function submitBtn() {
 // Вызов редактирования карточки
 function handlerEdit(e) {
   if (e.currentTarget.nodeName === "BUTTON") {
-    console.log("btn-edit");
   }
   // Работа с модальным окном для редактирования
   refs.closeBtn.addEventListener("click", handlerCloseModal);
@@ -435,14 +433,12 @@ createContact();
 function clearLS() {
   refs.clearAll.addEventListener("click", (e) => {
     if (e.currentTarget.nodeName === "BUTTON") {
-      console.log("yes");
       refs.statementTitleClear.textContent =
         "Вы действительно хотите ОЧИСТИТЬ ВСЁ?";
       refs.statementClear.classList.remove("hidden-statement");
       // refs.statementBtnYes.classList.add("hidden")
 
       refs.statementBtnYesClear.addEventListener("click", (e) => {
-        console.log("Это Clear в подтверждении");
         if (e.currentTarget.nodeName === "BUTTON") {
           console.dir(e);
           refs.backdropCreate.classList.remove("is-open");
@@ -466,17 +462,18 @@ function clearLS() {
 // Добавление катомных полей
 function submitField() {
   refs.submitBtnField.addEventListener("click", handlerBtnField);
+
   function handlerBtnField(e) {
     if (e.currentTarget.nodeName === "BUTTON") {
       let name = "";
       let info = "";
       const getSave = localStorage.getItem(`${newId}`);
+
       const parse = JSON.parse(getSave);
       name = refs.submitFieldName.value;
       info = refs.submitFieldInfo.value;
       const object = { ...parse };
-      console.log("id", newId);
-      console.log(parse.field1.value === "");
+
       if (parse.field1.value === "") {
         object.field1.value = name;
       } else if (parse.field2.value === "") {
@@ -505,14 +502,153 @@ function submitField() {
       }
       const getJson = JSON.stringify(object);
       localStorage.setItem(newId, getJson);
+      refs.getFieldWrapper.classList.add("is-hidden");
 
       getDataFromLS();
     }
   }
 }
 submitField();
-function editField() {}
 
+function submitEdit() {
+  const editBtnField = document.querySelectorAll(".btn-edit-name");
+  editBtnField.forEach((btn) => {
+    btn.addEventListener("click", handlerEdit);
+    function handlerEdit(e) {
+      if (e.currentTarget.nodeName === "BUTTON") {
+        const targetId = e.currentTarget.dataset.id;
+
+        const save = localStorage.getItem(targetId);
+
+        const parse = JSON.parse(save);
+
+        if (e.currentTarget.classList.contains("field1")) {
+          refs.getFieldWrapperEdit.classList.remove("is-hidden");
+          refs.submitFieldNameEdit.value = parse.field1.value;
+          refs.submitFieldInfoEdit.value = parse.field1.info;
+          saveEdit(parse, targetId);
+        }
+        if (e.currentTarget.classList.contains("field2")) {
+          refs.getFieldWrapperEdit.classList.remove("is-hidden");
+          refs.submitFieldNameEdit.value = parse.field2.value;
+          refs.submitFieldInfoEdit.value = parse.field2.info;
+          refs.submitBtnSaveEdit.addEventListener("click", saveEditField);
+          function saveEditField() {
+            parse.field2.value = refs.submitFieldNameEdit.value;
+            parse.field2.info = refs.submitFieldInfoEdit.value;
+            const str = JSON.stringify(parse);
+            localStorage.setItem(targetId, str);
+            refs.getFieldWrapperEdit.classList.add("is-hidden");
+            getDataFromLS();
+            refs.submitFieldNameEdit.value = "";
+            refs.submitFieldInfoEdit.value = "";
+          }
+        }
+        if (e.currentTarget.classList.contains("field3")) {
+          refs.getFieldWrapperEdit.classList.remove("is-hidden");
+          refs.submitFieldNameEdit.value = parse.field3.value;
+          refs.submitFieldInfoEdit.value = parse.field3.info;
+          refs.submitBtnSaveEdit.addEventListener("click", saveEditField);
+          function saveEditField() {
+            parse.field3.value = refs.submitFieldNameEdit.value;
+            parse.field3.info = refs.submitFieldInfoEdit.value;
+            const str = JSON.stringify(parse);
+            localStorage.setItem(targetId, str);
+            refs.getFieldWrapperEdit.classList.add("is-hidden");
+            getDataFromLS();
+            refs.submitFieldNameEdit.value = "";
+            refs.submitFieldInfoEdit.value = "";
+          }
+        }
+        if (e.currentTarget.classList.contains("field4")) {
+          refs.getFieldWrapperEdit.classList.remove("is-hidden");
+          refs.submitFieldNameEdit.value = parse.field4.value;
+          refs.submitFieldInfoEdit.value = parse.field4.info;
+          refs.submitBtnSaveEdit.addEventListener("click", saveEditField);
+          function saveEditField() {
+            parse.field4.value = refs.submitFieldNameEdit.value;
+            parse.field4.info = refs.submitFieldInfoEdit.value;
+            const str = JSON.stringify(parse);
+            localStorage.setItem(targetId, str);
+            refs.getFieldWrapperEdit.classList.add("is-hidden");
+            getDataFromLS();
+            refs.submitFieldNameEdit.value = "";
+            refs.submitFieldInfoEdit.value = "";
+          }
+        }
+        if (e.currentTarget.classList.contains("field5")) {
+          refs.getFieldWrapperEdit.classList.remove("is-hidden");
+          refs.submitFieldNameEdit.value = parse.field5.value;
+          refs.submitFieldInfoEdit.value = parse.field5.info;
+          refs.submitBtnSaveEdit.addEventListener("click", saveEditField);
+          function saveEditField() {
+            if (e.currentTarget.nodeName === "BUTTON") {
+              parse.field5.value = refs.submitFieldNameEdit.value;
+              parse.field5.info = refs.submitFieldInfoEdit.value;
+              const str = JSON.stringify(parse);
+              localStorage.setItem(targetId, str);
+              refs.getFieldWrapperEdit.classList.add("is-hidden");
+              getDataFromLS();
+              refs.submitFieldNameEdit.value = "";
+              refs.submitFieldInfoEdit.value = "";
+            }
+          }
+        }
+      }
+    }
+  });
+}
+submitEdit();
+
+// Сохраняет изменение полей
+function saveEdit(parse, targetId) {
+  refs.submitBtnSaveEdit.addEventListener("click", saveEditField);
+  function saveEditField(e) {
+    if (e.currentTarget.nodeName === "BUTTON") {
+      // refs.submitFieldNameEdit.value = "";
+      // refs.submitFieldInfoEdit.value = "";
+      parse.field1.value = refs.submitFieldNameEdit.value;
+      parse.field1.info = refs.submitFieldInfoEdit.value;
+      const str = JSON.stringify(parse);
+      localStorage.setItem(targetId, str);
+      console.log(parse.field1.value);
+      console.log(str);
+      refs.getFieldWrapperEdit.classList.add("is-hidden");
+      getDataFromLS();
+    }
+  }
+}
+
+// Закрывает окно создания кастомного поля
+function closeFieldBtn() {
+  refs.submitBtnClose.addEventListener("click", handlerClose);
+  function handlerClose(e) {
+    if (e.currentTarget.nodeName === "BUTTON") {
+      refs.getFieldWrapper.classList.add("is-hidden");
+    }
+  }
+}
+closeFieldBtn();
+
+function closeFieldEdit() {
+  refs.submitBtnCloseEdit.addEventListener("click", handlerClose);
+  function handlerClose(e) {
+    if (e.currentTarget.nodeName === "BUTTON") {
+      refs.getFieldWrapperEdit.classList.add("is-hidden");
+    }
+  }
+}
+closeFieldEdit();
+
+function closeField() {
+  refs.submitBtnClose.addEventListener("click", handlerClose);
+  function handlerClose(e) {
+    if (e.currentTarget.nodeName === "BUTTON") {
+      refs.getFieldWrapper.classList.add("is-hidden");
+    }
+  }
+}
+closeField();
 clearLS();
 // Для приятного визуала
 setTimeout(() => {
