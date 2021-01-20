@@ -46,6 +46,7 @@ const refs = {
   getFieldWrapper: document.querySelector(".contact__wrapper-create"),
 };
 // Глобальные переменные
+let newId;
 let array = [];
 let dataID = 0;
 let fieldInfo = "";
@@ -90,7 +91,7 @@ const templateFieldSecondName = (info) => `
 <p class="contact__element-second-name__title">${info}</p>
 `;
 // Забирает данный с LocalStorage
-function getDataFromLS(id) {
+function getDataFromLS() {
   const parseElement = [];
   array = [];
   for (let i = 0; i < 300; i += 1) {
@@ -104,11 +105,11 @@ function getDataFromLS(id) {
     }
   });
 
-  render(array, id);
+  render(array);
   return array;
 }
 // Первичный рендеринг
-function render(arr, id) {
+function render(arr) {
   console.log(arr);
   const markup = templateCard(arr);
   refs.contactWrapper.innerHTML = "";
@@ -160,22 +161,16 @@ function render(arr, id) {
   });
 
   const addFieldBtn = document.querySelectorAll(".field-add-btn.open");
-  let idEl = 0;
-  let getSave;
-  let parse;
   addFieldBtn.forEach((btn) => {
     btn.addEventListener("click", handlerAddField);
   });
   function handlerAddField(e) {
     if (e.currentTarget.nodeName === "BUTTON") {
-      refs.getFieldWrapper.classList.remove("is-hidden");
+      refs.getFieldWrapper.classList.toggle("hidden");
 
-      idEl = e.currentTarget.dataset.id;
-      getSave = localStorage.getItem(`${idEl}`);
-      parse = JSON.parse(getSave);
-      refs.submitFieldName.value = "";
-      refs.submitFieldInfo.value = "";
-      submitField(parse, idEl, arr);
+      newId = e.currentTarget.dataset.id;
+
+      console.log(newId);
     }
   }
 
@@ -469,20 +464,20 @@ function clearLS() {
 }
 
 // Добавление катомных полей
-function submitField(parse, id, arr) {
+function submitField() {
   refs.submitBtnField.addEventListener("click", handlerBtnField);
   function handlerBtnField(e) {
     if (e.currentTarget.nodeName === "BUTTON") {
       let name = "";
       let info = "";
-
+      const getSave = localStorage.getItem(`${newId}`);
+      const parse = JSON.parse(getSave);
       name = refs.submitFieldName.value;
       info = refs.submitFieldInfo.value;
       const object = { ...parse };
-      console.log("id", id);
+      console.log("id", newId);
       console.log(parse.field1.value === "");
       if (parse.field1.value === "") {
-        console.log("сработало");
         object.field1.value = name;
       } else if (parse.field2.value === "") {
         object.field2.value = name;
@@ -509,121 +504,15 @@ function submitField(parse, id, arr) {
         console.log("Ошибка, слишком много полей");
       }
       const getJson = JSON.stringify(object);
-      console.log(object);
-      console.log(id);
-      localStorage.setItem(id, getJson);
+      localStorage.setItem(newId, getJson);
 
-      getDataFromLS(id);
-      return;
+      getDataFromLS();
     }
   }
 }
-function editField() {
-  const editBtnField = document.querySelectorAll(".btn-edit-name");
-  editBtnField.forEach((btn) => {
-    btn.addEventListener("click", handlerEdit);
-    function handlerEdit(e) {
-      if (e.currentTarget.nodeName === "BUTTON") {
-        const id = e.currentTarget.dataset.id;
-        const save = localStorage.getItem(id);
-        const parse = JSON.parse(save);
+submitField();
+function editField() {}
 
-        if (e.currentTarget.classList.contains("field1")) {
-          refs.getFieldWrapper.classList.remove("is-hidden");
-          refs.submitFieldName.value = parse.field1.value;
-          refs.submitFieldInfo.value = parse.field1.info;
-          refs.submitBtnField.addEventListener("click", saveEditField);
-          function saveEditField() {
-            parse.field1.value = refs.submitFieldName.value;
-            parse.field1.info = refs.submitFieldInfo.value;
-            const str = JSON.stringify(parse);
-            localStorage.setItem(id, str);
-            refs.getFieldWrapper.classList.add("is-hidden");
-            refs.submitFieldName.value = "";
-            refs.submitFieldInfo.value = "";
-            getDataFromLS(id);
-          }
-        }
-        if (e.currentTarget.classList.contains("field2")) {
-          refs.getFieldWrapper.classList.remove("is-hidden");
-          refs.submitFieldName.value = parse.field2.value;
-          refs.submitFieldInfo.value = parse.field2.info;
-          refs.submitBtnField.addEventListener("click", saveEditField);
-          function saveEditField() {
-            parse.field2.value = refs.submitFieldName.value;
-            parse.field2.info = refs.submitFieldInfo.value;
-            const str = JSON.stringify(parse);
-            localStorage.setItem(id, str);
-            refs.getFieldWrapper.classList.add("is-hidden");
-            refs.submitFieldName.value = "";
-            refs.submitFieldInfo.value = "";
-            getDataFromLS(id);
-          }
-        }
-        if (e.currentTarget.classList.contains("field3")) {
-          refs.getFieldWrapper.classList.remove("is-hidden");
-          refs.submitFieldName.value = parse.field3.value;
-          refs.submitFieldInfo.value = parse.field3.info;
-          refs.submitBtnField.addEventListener("click", saveEditField);
-          function saveEditField() {
-            parse.field3.value = refs.submitFieldName.value;
-            parse.field3.info = refs.submitFieldInfo.value;
-            const str = JSON.stringify(parse);
-            localStorage.setItem(id, str);
-            refs.getFieldWrapper.classList.add("is-hidden");
-            refs.submitFieldName.value = "";
-            refs.submitFieldInfo.value = "";
-            getDataFromLS(id);
-          }
-        }
-        if (e.currentTarget.classList.contains("field4")) {
-          refs.getFieldWrapper.classList.remove("is-hidden");
-          refs.submitFieldName.value = parse.field4.value;
-          refs.submitFieldInfo.value = parse.field4.info;
-          refs.submitBtnField.addEventListener("click", saveEditField);
-          function saveEditField() {
-            parse.field4.value = refs.submitFieldName.value;
-            parse.field4.info = refs.submitFieldInfo.value;
-            const str = JSON.stringify(parse);
-            localStorage.setItem(id, str);
-            refs.getFieldWrapper.classList.add("is-hidden");
-            refs.submitFieldName.value = "";
-            refs.submitFieldInfo.value = "";
-            getDataFromLS(id);
-          }
-        }
-        if (e.currentTarget.classList.contains("field5")) {
-          refs.getFieldWrapper.classList.remove("is-hidden");
-          refs.submitFieldName.value = parse.field5.value;
-          refs.submitFieldInfo.value = parse.field5.info;
-          refs.submitBtnField.addEventListener("click", saveEditField);
-          function saveEditField() {
-            parse.field5.value = refs.submitFieldName.value;
-            parse.field5.info = refs.submitFieldInfo.value;
-            const str = JSON.stringify(parse);
-            localStorage.setItem(id, str);
-            refs.getFieldWrapper.classList.add("is-hidden");
-            refs.submitFieldName.value = "";
-            refs.submitFieldInfo.value = "";
-            getDataFromLS(id);
-          }
-        }
-      }
-    }
-  });
-}
-
-editField();
-// Закрывает окно создания кастомного поля
-function closeField() {
-  refs.submitBtnClose.addEventListener("click", handlerClose);
-  function handlerClose(e) {
-    if (e.currentTarget.nodeName === "BUTTON") {
-      refs.getFieldWrapper.classList.add("is-hidden");
-    }
-  }
-}
-closeField();
 clearLS();
 // Для приятного визуала
 setTimeout(() => {
