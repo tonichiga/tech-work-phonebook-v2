@@ -6,7 +6,7 @@
 // Импорт шаблона
 
 import templateCard from "./template/card.hbs";
-import templateField from "./template/template-field.hbs";
+
 // Ссылки на необходимые элементы
 const refs = {
   container: document.querySelector(".container"),
@@ -59,6 +59,9 @@ let dataID = 0;
 let fieldInfo = "";
 let fieldName = "";
 let idBtn = 0;
+let deleteId = 0;
+let btnName = "";
+// let targetId = 0;
 // Создание первичного объекта
 // Знаю, что Math.random() не подходит для генерации ID, так как есть вероятность совпавшего ID.
 // Как тестовый вариант должно сработать. Позже можно доработать.
@@ -91,12 +94,7 @@ let obj = {
   id: "",
   //
 };
-const templateFieldName = (name) => `
-<p class="contact__element-name__title">${name}</p>
-`;
-const templateFieldSecondName = (info) => `
-<p class="contact__element-second-name__title">${info}</p>
-`;
+
 // Забирает данный с LocalStorage
 function getDataFromLS() {
   const parseElement = [];
@@ -111,21 +109,17 @@ function getDataFromLS() {
       array.push(JSON.parse(item));
     }
   });
-
   render(array);
 }
 // Первичный рендеринг
 function render(arr) {
   const markup = templateCard(arr);
+  // Очистка контейнера перед добавлением (обновление контента)
   refs.contactWrapper.innerHTML = "";
   refs.contactWrapper.insertAdjacentHTML("beforeend", markup);
-  // Очистка контейнера перед добавлением (обновление контента)
 
   const contactElementName = document.querySelectorAll(
     ".contact__element-name__title"
-  );
-  const contactElementSecondName = document.querySelectorAll(
-    ".contact__element-second-name__title"
   );
   const contactFieldWrapperTitle = document.querySelectorAll(
     "div.contact__field-wrapper > .contact__element-second-name__title"
@@ -133,17 +127,19 @@ function render(arr) {
   const contactFieldWrapper = document.querySelectorAll(
     ".contact__field-wrapper"
   );
+  // Отбор вложенного объекта
   for (let keys in arr) {
     const obj = Object.values(arr[keys]);
     if (typeof obj === "object") {
     }
   }
+  // Очистка DOM от пустых элементов добавленных шаблоном
   contactElementName.forEach((el) => {
     if (el.textContent === "") {
       el.remove();
     }
   });
-
+  // Очистка DOM от пустых элементов добавленных шаблоном
   contactFieldWrapper.forEach((element) => {
     element.children.forEach((el) => {
       if (el.nodeName === "P") {
@@ -153,11 +149,7 @@ function render(arr) {
       }
     });
   });
-  contactFieldWrapperTitle.forEach((el) => {
-    if (el.textContent === "") {
-    }
-  });
-
+  // Добавляет Event для кнопки добавления новых полей
   const addFieldBtn = document.querySelectorAll(".field-add-btn.open");
   addFieldBtn.forEach((btn) => {
     btn.addEventListener("click", handlerAddField);
@@ -165,7 +157,7 @@ function render(arr) {
   function handlerAddField(e) {
     if (e.currentTarget.nodeName === "BUTTON") {
       refs.getFieldWrapper.classList.remove("is-hidden");
-
+      // Присвоение ID
       newId = e.currentTarget.dataset.id;
       refs.submitFieldName.value = "";
       refs.submitFieldInfo.value = "";
@@ -175,6 +167,11 @@ function render(arr) {
   editBtnFn(arr);
   deleteContact();
   submitEdit();
+  deleteField1();
+  deleteField2();
+  deleteField3();
+  deleteField4();
+  deleteField5();
 }
 // Открытие модального окна для создания контакта
 function createContact() {
@@ -183,7 +180,6 @@ function createContact() {
 // После рендеринга слушаем кнопу Edit
 function editBtnFn() {
   const editBtn = document.querySelectorAll(".contact__btn-edit");
-  const contact = document.querySelectorAll(".contact");
   editBtn.forEach((btn) => {
     btn.addEventListener("click", handlerEdit, true);
   });
@@ -216,7 +212,7 @@ function handlerCreate(e) {
     refs.backdropCreate.classList.add("is-open");
     // Генерация ID не самая удачная, можно поставить Date.now() или подключить плагин,
     // но из - за особенностей работы с LS,
-    // для быстродействие выбран не большой диапазон рандомных чисел, чтобы бычтрее было
+    // для быстродействие выбран не большой диапазон рандомных чисел, чтобы быстрее было
     // пербирать полученные данные с LS.
     obj.id = Math.floor(Math.random() * 300);
     refs.createBtnSave.addEventListener("click", handlerCreateSave);
@@ -226,6 +222,7 @@ function handlerCreate(e) {
 // Логика создания карточки
 function handlerCreateSave(e) {
   if (e.currentTarget.nodeName === "BUTTON") {
+    // Запись новых значений в объект
     dataID = obj.id;
     obj.name = refs.createName.value;
     obj.lastname = refs.createLastname.value;
@@ -241,6 +238,7 @@ function handlerCreateSave(e) {
 // Логика редактирования карточки
 function handlerSubmit(e) {
   if (e.currentTarget.nodeName === "BUTTON") {
+    // При открытии окна редактирование, отображались редактируемые значения
     obj.name = refs.inputName.value;
     obj.lastname = refs.inputLastname.value;
     obj.number = refs.inputNumber.value;
@@ -279,6 +277,7 @@ function handlerSubmit(e) {
 }
 // Закрытие модального окна
 function handlerCloseModal() {
+  // Окно подтверждения
   refs.statementTitle.textContent = "Вы действительно хотите выйти?";
   refs.statement.classList.remove("hidden-statement");
   refs.statementBtnYes.addEventListener("click", (e) => {
@@ -292,6 +291,7 @@ function handlerCloseModal() {
       refs.inputEmail.value = "";
     }
   });
+  // Событие при отмене подтверждения
   refs.statementBtnNo.addEventListener("click", (e) => {
     if (e.currentTarget.nodeName === "BUTTON") {
       refs.statement.classList.add("hidden-statement");
@@ -308,6 +308,7 @@ function handlerClickCloseModal(e) {
         refs.backdrop.classList.remove("is-open");
         refs.backdrop.classList.add("is-hidden");
         refs.statement.classList.add("hidden-statement");
+        // Чистка инпутов
         refs.inputName.value = "";
         refs.inputLastname.value = "";
         refs.inputNumber.value = "";
@@ -468,12 +469,12 @@ function submitField() {
       let name = "";
       let info = "";
       const getSave = localStorage.getItem(`${newId}`);
-
+      // Парсинг и добавление кастомных полей
       const parse = JSON.parse(getSave);
       name = refs.submitFieldName.value;
       info = refs.submitFieldInfo.value;
       const object = { ...parse };
-
+      // Логика перебора полей - если занят, то запиши в следующий.
       if (parse.field1.value === "") {
         object.field1.value = name;
       } else if (parse.field2.value === "") {
@@ -509,104 +510,56 @@ function submitField() {
   }
 }
 submitField();
-
+// Редактирует кастомные поля
 function submitEdit() {
-  const editBtnField = document.querySelectorAll(".btn-edit-name");
-  editBtnField.forEach((btn) => {
-    btn.addEventListener("click", handlerEdit);
-    function handlerEdit(e) {
-      if (e.currentTarget.nodeName === "BUTTON") {
-        const targetId = e.currentTarget.dataset.id;
-
+  refs.contactWrapper.addEventListener("click", handlerFoundEditBtn, true);
+  function handlerFoundEditBtn(e) {
+    if (e.target.parentNode.nodeName === "BUTTON") {
+      if (e.target.parentNode.classList.contains("btn-edit-name")) {
+        const targetId = e.target.parentNode.dataset.id;
         const save = localStorage.getItem(targetId);
-
         const parse = JSON.parse(save);
 
-        if (e.currentTarget.classList.contains("field1")) {
+        if (e.target.parentNode.classList.contains("field1")) {
           refs.getFieldWrapperEdit.classList.remove("is-hidden");
           refs.submitFieldNameEdit.value = parse.field1.value;
           refs.submitFieldInfoEdit.value = parse.field1.info;
-          saveEdit(parse, targetId);
+          saveEditField1(parse, targetId);
         }
-        if (e.currentTarget.classList.contains("field2")) {
+        if (e.target.parentNode.classList.contains("field2")) {
           refs.getFieldWrapperEdit.classList.remove("is-hidden");
           refs.submitFieldNameEdit.value = parse.field2.value;
           refs.submitFieldInfoEdit.value = parse.field2.info;
-          refs.submitBtnSaveEdit.addEventListener("click", saveEditField);
-          function saveEditField() {
-            parse.field2.value = refs.submitFieldNameEdit.value;
-            parse.field2.info = refs.submitFieldInfoEdit.value;
-            const str = JSON.stringify(parse);
-            localStorage.setItem(targetId, str);
-            refs.getFieldWrapperEdit.classList.add("is-hidden");
-            getDataFromLS();
-            refs.submitFieldNameEdit.value = "";
-            refs.submitFieldInfoEdit.value = "";
-          }
+          saveEditField2(parse, targetId);
         }
-        if (e.currentTarget.classList.contains("field3")) {
+        if (e.target.parentNode.classList.contains("field3")) {
           refs.getFieldWrapperEdit.classList.remove("is-hidden");
           refs.submitFieldNameEdit.value = parse.field3.value;
           refs.submitFieldInfoEdit.value = parse.field3.info;
-          refs.submitBtnSaveEdit.addEventListener("click", saveEditField);
-          function saveEditField() {
-            parse.field3.value = refs.submitFieldNameEdit.value;
-            parse.field3.info = refs.submitFieldInfoEdit.value;
-            const str = JSON.stringify(parse);
-            localStorage.setItem(targetId, str);
-            refs.getFieldWrapperEdit.classList.add("is-hidden");
-            getDataFromLS();
-            refs.submitFieldNameEdit.value = "";
-            refs.submitFieldInfoEdit.value = "";
-          }
+          saveEditField3(parse, targetId);
         }
-        if (e.currentTarget.classList.contains("field4")) {
+        if (e.target.parentNode.classList.contains("field4")) {
           refs.getFieldWrapperEdit.classList.remove("is-hidden");
           refs.submitFieldNameEdit.value = parse.field4.value;
           refs.submitFieldInfoEdit.value = parse.field4.info;
-          refs.submitBtnSaveEdit.addEventListener("click", saveEditField);
-          function saveEditField() {
-            parse.field4.value = refs.submitFieldNameEdit.value;
-            parse.field4.info = refs.submitFieldInfoEdit.value;
-            const str = JSON.stringify(parse);
-            localStorage.setItem(targetId, str);
-            refs.getFieldWrapperEdit.classList.add("is-hidden");
-            getDataFromLS();
-            refs.submitFieldNameEdit.value = "";
-            refs.submitFieldInfoEdit.value = "";
-          }
+          saveEditField4(parse, targetId);
         }
-        if (e.currentTarget.classList.contains("field5")) {
+        if (e.target.parentNode.classList.contains("field5")) {
           refs.getFieldWrapperEdit.classList.remove("is-hidden");
           refs.submitFieldNameEdit.value = parse.field5.value;
           refs.submitFieldInfoEdit.value = parse.field5.info;
-          refs.submitBtnSaveEdit.addEventListener("click", saveEditField);
-          function saveEditField() {
-            if (e.currentTarget.nodeName === "BUTTON") {
-              parse.field5.value = refs.submitFieldNameEdit.value;
-              parse.field5.info = refs.submitFieldInfoEdit.value;
-              const str = JSON.stringify(parse);
-              localStorage.setItem(targetId, str);
-              refs.getFieldWrapperEdit.classList.add("is-hidden");
-              getDataFromLS();
-              refs.submitFieldNameEdit.value = "";
-              refs.submitFieldInfoEdit.value = "";
-            }
-          }
+          saveEditField5(parse, targetId);
         }
       }
     }
-  });
+  }
 }
-submitEdit();
 
-// Сохраняет изменение полей
-function saveEdit(parse, targetId) {
+// Сохраняет изменение поля 1
+function saveEditField1(parse, targetId) {
   refs.submitBtnSaveEdit.addEventListener("click", saveEditField);
   function saveEditField(e) {
     if (e.currentTarget.nodeName === "BUTTON") {
-      // refs.submitFieldNameEdit.value = "";
-      // refs.submitFieldInfoEdit.value = "";
       parse.field1.value = refs.submitFieldNameEdit.value;
       parse.field1.info = refs.submitFieldInfoEdit.value;
       const str = JSON.stringify(parse);
@@ -614,7 +567,188 @@ function saveEdit(parse, targetId) {
       console.log(parse.field1.value);
       console.log(str);
       refs.getFieldWrapperEdit.classList.add("is-hidden");
-      getDataFromLS();
+      location.reload();
+    }
+  }
+  return;
+}
+// Сохраняет изменение поля 2
+function saveEditField2(parse, targetId) {
+  refs.submitBtnSaveEdit.addEventListener("click", saveEditField);
+  function saveEditField(e) {
+    if (e.currentTarget.nodeName === "BUTTON") {
+      parse.field2.value = refs.submitFieldNameEdit.value;
+      parse.field2.info = refs.submitFieldInfoEdit.value;
+      const str = JSON.stringify(parse);
+      localStorage.setItem(targetId, str);
+      console.log(parse.field2.value);
+      console.log(str);
+      refs.getFieldWrapperEdit.classList.add("is-hidden");
+      location.reload();
+    }
+  }
+  return;
+}
+// Сохраняет изменение поля 3
+function saveEditField3(parse, targetId) {
+  refs.submitBtnSaveEdit.addEventListener("click", saveEditField);
+  function saveEditField(e) {
+    if (e.currentTarget.nodeName === "BUTTON") {
+      parse.field3.value = refs.submitFieldNameEdit.value;
+      parse.field3.info = refs.submitFieldInfoEdit.value;
+      const str = JSON.stringify(parse);
+      localStorage.setItem(targetId, str);
+      console.log(parse.field3.value);
+      console.log(str);
+      refs.getFieldWrapperEdit.classList.add("is-hidden");
+      location.reload();
+    }
+  }
+  return;
+}
+// Сохраняет изменение поля 4
+function saveEditField4(parse, targetId) {
+  refs.submitBtnSaveEdit.addEventListener("click", saveEditField);
+  function saveEditField(e) {
+    if (e.currentTarget.nodeName === "BUTTON") {
+      parse.field4.value = refs.submitFieldNameEdit.value;
+      parse.field4.info = refs.submitFieldInfoEdit.value;
+      const str = JSON.stringify(parse);
+      localStorage.setItem(targetId, str);
+      console.log(parse.field4.value);
+      console.log(str);
+      refs.getFieldWrapperEdit.classList.add("is-hidden");
+      location.reload();
+    }
+  }
+  return;
+}
+// Сохраняет изменение поля 5
+function saveEditField5(parse, targetId) {
+  refs.submitBtnSaveEdit.addEventListener("click", saveEditField);
+  function saveEditField(e) {
+    if (e.currentTarget.nodeName === "BUTTON") {
+      parse.field5.value = refs.submitFieldNameEdit.value;
+      parse.field5.info = refs.submitFieldInfoEdit.value;
+      const str = JSON.stringify(parse);
+      localStorage.setItem(targetId, str);
+      console.log(parse.field5.value);
+      console.log(str);
+      refs.getFieldWrapperEdit.classList.add("is-hidden");
+      location.reload();
+    }
+  }
+  return;
+}
+// Удаляет выбранное кастомное поле 1
+function deleteField1() {
+  refs.contactWrapper.addEventListener("click", handlerDeleteField, true);
+  function handlerDeleteField(e) {
+    if (e.target.parentNode.nodeName === "BUTTON") {
+      if (e.target.parentNode.classList.contains("btn-delete-name")) {
+        const arr = e.target.parentNode.classList;
+        if (arr.contains("field1")) {
+          // Получает ID карточки
+          deleteId = e.target.parentNode.dataset.id;
+          // Получает данные
+          const toSave = localStorage.getItem(deleteId);
+          // Парсит
+          const toParse = JSON.parse(toSave);
+          // Добавляет пустое свойство в ключ
+          toParse.field1.value = "";
+          toParse.field1.info = "";
+          // Форматирует в JSON
+          const toStr = JSON.stringify(toParse);
+          // Отправляетв в LS
+          localStorage.setItem(deleteId, toStr);
+          // Перезагруджает страницу для рендеринга
+          location.reload();
+        }
+      }
+    }
+  }
+}
+// Удаляет выбранное кастомное поле 2
+function deleteField2() {
+  refs.contactWrapper.addEventListener("click", handlerDeleteField, true);
+  function handlerDeleteField(e) {
+    if (e.target.parentNode.nodeName === "BUTTON") {
+      if (e.target.parentNode.classList.contains("btn-delete-name")) {
+        const arr = e.target.parentNode.classList;
+        if (arr.contains("field2")) {
+          deleteId = e.target.parentNode.dataset.id;
+          const toSave = localStorage.getItem(deleteId);
+          const toParse = JSON.parse(toSave);
+          toParse.field2.value = "";
+          toParse.field2.info = "";
+          const toStr = JSON.stringify(toParse);
+          localStorage.setItem(deleteId, toStr);
+          location.reload();
+        }
+      }
+    }
+  }
+}
+// Удаляет выбранное кастомное поле 3
+function deleteField3() {
+  refs.contactWrapper.addEventListener("click", handlerDeleteField, true);
+  function handlerDeleteField(e) {
+    if (e.target.parentNode.nodeName === "BUTTON") {
+      if (e.target.parentNode.classList.contains("btn-delete-name")) {
+        const arr = e.target.parentNode.classList;
+        if (arr.contains("field3")) {
+          deleteId = e.target.parentNode.dataset.id;
+          const toSave = localStorage.getItem(deleteId);
+          const toParse = JSON.parse(toSave);
+          toParse.field3.value = "";
+          toParse.field3.info = "";
+          const toStr = JSON.stringify(toParse);
+          localStorage.setItem(deleteId, toStr);
+          location.reload();
+        }
+      }
+    }
+  }
+}
+// Удаляет выбранное кастомное поле 4
+function deleteField4() {
+  refs.contactWrapper.addEventListener("click", handlerDeleteField, true);
+  function handlerDeleteField(e) {
+    if (e.target.parentNode.nodeName === "BUTTON") {
+      if (e.target.parentNode.classList.contains("btn-delete-name")) {
+        const arr = e.target.parentNode.classList;
+        if (arr.contains("field4")) {
+          deleteId = e.target.parentNode.dataset.id;
+          const toSave = localStorage.getItem(deleteId);
+          const toParse = JSON.parse(toSave);
+          toParse.field4.value = "";
+          toParse.field4.info = "";
+          const toStr = JSON.stringify(toParse);
+          localStorage.setItem(deleteId, toStr);
+          location.reload();
+        }
+      }
+    }
+  }
+}
+// Удаляет выбранное кастомное поле 5
+function deleteField5() {
+  refs.contactWrapper.addEventListener("click", handlerDeleteField, true);
+  function handlerDeleteField(e) {
+    if (e.target.parentNode.nodeName === "BUTTON") {
+      if (e.target.parentNode.classList.contains("btn-delete-name")) {
+        const arr = e.target.parentNode.classList;
+        if (arr.contains("field5")) {
+          deleteId = e.target.parentNode.dataset.id;
+          const toSave = localStorage.getItem(deleteId);
+          const toParse = JSON.parse(toSave);
+          toParse.field5.value = "";
+          toParse.field5.info = "";
+          const toStr = JSON.stringify(toParse);
+          localStorage.setItem(deleteId, toStr);
+          location.reload();
+        }
+      }
     }
   }
 }
@@ -629,7 +763,7 @@ function closeFieldBtn() {
   }
 }
 closeFieldBtn();
-
+// Закрывает окно редактирования пкастомного поля
 function closeFieldEdit() {
   refs.submitBtnCloseEdit.addEventListener("click", handlerClose);
   function handlerClose(e) {
@@ -639,16 +773,8 @@ function closeFieldEdit() {
   }
 }
 closeFieldEdit();
+//
 
-function closeField() {
-  refs.submitBtnClose.addEventListener("click", handlerClose);
-  function handlerClose(e) {
-    if (e.currentTarget.nodeName === "BUTTON") {
-      refs.getFieldWrapper.classList.add("is-hidden");
-    }
-  }
-}
-closeField();
 clearLS();
 // Для приятного визуала
 setTimeout(() => {
@@ -656,4 +782,6 @@ setTimeout(() => {
   refs.backdropCreate.classList.remove("hidden");
   refs.statement.classList.remove("hidden");
   refs.statementClear.classList.remove("hidden");
+  refs.getFieldWrapper.classList.remove("hidden");
+  refs.getFieldWrapperEdit.classList.remove("hidden");
 }, 250);

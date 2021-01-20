@@ -11,261 +11,218 @@
     />
   </head>
   <body>
-   <header class="header">
-     <div class="container">
-       <div class="header">
-         <a href="./index.html"><h1 class="header__title">Приложение контактов</h1></a>
-         
+    <header class="header">
+      <div class="container">
+        <div class="header">
+          <a href="./index.html"
+            ><h1 class="header__title">Приложение контактов</h1></a
+          >
         </div>
-     </div>
-   </header>
-   <main>
-    <div class="container">
-      <div class="contact__wrapper-create is-hidden " >
-        <div class="create-field-wrapper ">
-          <label>
-       <input type="text" placeholder="Название поля" class="create-field-name">
-       <input type="text" placeholder="Информация" class="create-field-info">
-          </label>
+      </div>
+    </header>
+    <main>
+      <div class="container">
+        <div class="contact__wrapper-create is-hidden hidden">
+          <div class="create-field-wrapper">
+            <p class="create-field-wrapper-title">
+              Создать дополнительное поле
+            </p>
+            <label>
+              <input
+                type="text"
+                placeholder="Название поля"
+                class="create-field-name"
+              />
+            </label>
+            <label>
+              <input
+                type="text"
+                placeholder="Информация"
+                class="create-field-info"
+              />
+            </label>
+            <button type="button" class="create-field-save-btn">
+              Сохранить
+            </button>
+            <button type="button" class="create-field-close-btn">
+              Закрыть
+            </button>
+          </div>
+        </div>
+        <div class="contact__wrapper-create-edit is-hidden hidden">
+          <div class="create-field-wrapper-edit">
+            <p class="create-field-wrapper-title">Редактировать поле</p>
+            <label>
+              <input
+                type="text"
+                placeholder="Название поля"
+                class="create-field-name-edit"
+              />
+            </label>
+            <label>
+              <input
+                type="text"
+                placeholder="Информация"
+                class="create-field-info-edit"
+              />
+            </label>
+            <button type="button" class="create-field-save-btn-edit">
+              Сохранить
+            </button>
+            <button type="button" class="create-field-close-btn-edit">
+              Закрыть
+            </button>
+          </div>
+        </div>
+        <div class="wrapper-main-btn">
+          <button type="button" class="create-btn">Создать контакт</button>
+          <button type="button" class="create-btn-clear">Очистить всё</button>
+        </div>
 
-       <button type="button" class="create-field-save-btn">Сохранить</button>
-       <button type="button" class="create-field-close-btn">Закрыть</button>
-     </div>
-      </div>
-      <div class="contact__wrapper-create-edit is-hidden " >
-        <div class="create-field-wrapper-edit ">
-          <label>
-       <input type="text" placeholder="Название поля" class="create-field-name-edit">
-       <input type="text" placeholder="Информация" class="create-field-info-edit">
-          </label>
-
-=       <button type="button" class="create-field-save-btn-edit">Save</button>
-       <button type="button" class="create-field-close-btn-edit">Закрыть</button>
-     </div>
-      </div>
-      <div class="wrapper-main-btn">
-       <button type="button" class="create-btn">Создать контакт</button>
-       <button type="button" class="create-btn-clear">Очистить всё</button>
-      </div>
-       
-      <div class="main__wrapper">
-        <h2 class="main__title">Создание контакта</h2>
-        <p class="main__text">Приложение использует синхронизацию с <b>LocalStorage</b>  для хранения контактов в памяти браузера.
-          Все действия сохраняются и при перезагрузке страницы всё останется, как прежде. 
-        </p>
-        <p class="main__text">Кнопка "Очистить всё", очищает Ваш <b>LocalStorage</b>  на данном ресурсе.</p>
-      </div>
-      <div class="contact__wrapper">
-      </div>
-      <!-- <div class="contact">
-        <h1 class="contact__title">Дензел Вашингтон</h1>
-        <div class="contact__btn">
-          <button type="button" class="contact__btn-delete">
-            <i class="material-icons btn">clear</i>
-          </button>
-          <button type="button" class="contact__btn-edit">
-            <i class="material-icons btn">create</i>
-          </button>
-          <button type="button" class="contact__btn-save">
-            <i class="material-icons btn">done</i>
-          </button>
+        <div class="main__wrapper">
+          <h2 class="main__title">Создание контакта</h2>
+          <p class="main__text">
+            Приложение использует синхронизацию с <b>LocalStorage</b> для
+            хранения контактов в памяти браузера. Все действия сохраняются и при
+            перезагрузке страницы всё останется, как прежде.
+          </p>
+          <p class="main__text">
+            Кнопка "Очистить всё", очищает Ваш <b>LocalStorage</b> на данном
+            ресурсе.
+          </p>
         </div>
-        <ul class="contact__list">
-          <li class="contact__element">
-            <div class="contact__element-name">
-              <p class="contact__element-name__title">Имя</p>
-              <p class="contact__element-name__title">Фамилия</p>
-              <p class="contact__element-name__title">Номер телефона</p>
-              <p class="contact__element-name__title">e-mail</p>
-            </div>
-          </li>
-          <li class="contact__element">
-            <div class="contact__element-second-name">
-              <p class="contact__element-second-name__title">Дензел</p>
-              <p class="contact__element-second-name__title">Вашингтон</p>
-              <p class="contact__element-second-name__title">0931232211</p>
-              <p class="contact__element-second-name__title">
-                densel@gmail.com
-              </p>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div class="contact">
-        <h1 class="contact__title">Дензел Вашингтон</h1>
-        <div class="contact__btn">
-          <button type="button" class="contact__btn-delete">
-            <i class="material-icons btn">clear</i>
-          </button>
-          <button type="button" class="contact__btn-edit">
-            <i class="material-icons btn">create</i>
-          </button>
-          <button type="button" class="contact__btn-save">
-            <i class="material-icons btn">done</i>
-          </button>
+        <div class="contact__wrapper"></div>
+        <div class="backdrop is-hidden hidden" data-modal>
+          <div class="modal-wrapper modal-form">
+            <form action="#" class="modal-form1">
+              <h3 class="modal-form-title">Редактирование контакта</h3>
+              <div class="modal-form-container">
+                <input
+                  class="modal-form-input name"
+                  required
+                  type="text"
+                  id="create-name"
+                  name="user-name"
+                  placeholder=" "
+                />
+                <label class="modal-label" for="name">Имя</label>
+              </div>
+              <div class="modal-form-container">
+                <input
+                  class="modal-form-input lastname"
+                  required
+                  type="text"
+                  id="create-tel"
+                  name="user-tel"
+                  placeholder=" "
+                />
+                <label class="modal-label" for="tel">Фамилия</label>
+              </div>
+              <div class="modal-form-container">
+                <input
+                  class="modal-form-input number"
+                  type="text"
+                  id="create-number"
+                  name="user-email"
+                  placeholder=" "
+                />
+                <label class="modal-label" for="email">Номер телефона</label>
+              </div>
+              <div class="modal-form-container">
+                <input
+                  class="modal-form-input email"
+                  type="text"
+                  id="create-email"
+                  name="user-email"
+                  placeholder=" "
+                />
+                <label class="modal-label" for="email">Почта</label>
+              </div>
+              <button class="modal-btn-submit" type="button">Сохранить</button>
+              <button type="button" class="close-btn">
+                <i class="material-icons color-blue">clear</i>
+              </button>
+            </form>
+          </div>
         </div>
-        <ul class="contact__list">
-          <li class="contact__element">
-            <div class="contact__element-name">
-              <p class="contact__element-name__title">Имя</p>
-              <p class="contact__element-name__title">Фамилия</p>
-              <p class="contact__element-name__title">Номер телефона</p>
-              <p class="contact__element-name__title">e-mail</p>
-            </div>
-          </li>
-          <li class="contact__element">
-            <div class="contact__element-second-name">
-              <p class="contact__element-second-name__title">Дензел</p>
-              <p class="contact__element-second-name__title">Вашингтон</p>
-              <p class="contact__element-second-name__title">0931232211</p>
-              <p class="contact__element-second-name__title">
-                densel@gmail.com
-              </p>
-            </div>
-          </li>
-        </ul>
-      </div> -->
-      <div class="backdrop is-hidden hidden" data-modal>
-      <div class="modal-wrapper modal-form">
-        <form action="#" class="modal-form1">
-          <h3 class="modal-form-title">
-            Редактирование контакта
-          </h3>
-          <div class="modal-form-container">
-            <input
-              class="modal-form-input name"
-              required 
-              type="text"
-              id="create-name"
-              name="user-name"
-              placeholder=" "
-            />
-            <label class="modal-label" for="name">Имя</label>
-            
+        <div class="backdrop is-hidden hidden create" data-modal>
+          <div class="modal-wrapper modal-form">
+            <form action="#" class="modal-form1">
+              <h3 class="modal-form-title">Создание контакта</h3>
+              <div class="modal-form-container">
+                <input
+                  class="modal-form-input name create"
+                  required
+                  type="text"
+                  id="name"
+                  name="user-name"
+                  placeholder=" "
+                />
+                <label class="modal-label" for="name">Имя</label>
+              </div>
+              <div class="modal-form-container">
+                <input
+                  class="modal-form-input lastname create"
+                  required
+                  type="text"
+                  id="tel"
+                  name="user-tel"
+                  placeholder=" "
+                />
+                <label class="modal-label" for="tel">Фамилия</label>
+              </div>
+              <div class="modal-form-container">
+                <input
+                  class="modal-form-input number create"
+                  type="text"
+                  id="number"
+                  name="user-number"
+                  placeholder=" "
+                />
+                <label class="modal-label" for="email">Номер телефона</label>
+              </div>
+              <div class="modal-form-container">
+                <input
+                  class="modal-form-input email create"
+                  type="text"
+                  id="email"
+                  name="user-email"
+                  placeholder=" "
+                />
+                <label class="modal-label" for="email">Почта</label>
+              </div>
+              <button class="modal-btn-submit create" type="button">
+                Сохранить
+              </button>
+              <button type="button" class="close-btn create">
+                <i class="material-icons color-blue">clear</i>
+              </button>
+            </form>
           </div>
-          <div class="modal-form-container">
-            <input
-              class="modal-form-input lastname"
-              required 
-              type="text"
-              id="create-tel"
-              name="user-tel"
-              placeholder=" "
-            />
-            <label class="modal-label" for="tel">Фамилия</label>
-            
-          </div>
-          <div class="modal-form-container ">
-            <input
-              class="modal-form-input number"
-              type="text"
-              id="create-number"
-              name="user-email"
-              placeholder=" "
-            />
-            <label class="modal-label" for="email">Номер телефона</label>
-            
-          </div>
-            <div class="modal-form-container ">
-            <input
-              class="modal-form-input email"
-              type="text"
-              id="create-email"
-              name="user-email"
-              placeholder=" "
-            />
-            <label class="modal-label" for="email">Почта</label>
-            
-          </div>      
-          <button class="modal-btn-submit" type="button">Сохранить</button>
-          <button type="button" class="close-btn" ><i class="material-icons color-blue">clear</i></button>
-          </svg>
-        </form>
-      </div>
-      </div>
-      <div class="backdrop is-hidden hidden create" data-modal>
-      <div class="modal-wrapper modal-form">
-        <form action="#" class="modal-form1">
-          <h3 class="modal-form-title">
-            Создание контакта
-          </h3>
-          <div class="modal-form-container">
-            <input
-              class="modal-form-input name create"
-              required 
-              type="text"
-              id="name"
-              name="user-name"
-              placeholder=" "
-            />
-            <label class="modal-label" for="name">Имя</label>
-            
-          </div>
-          <div class="modal-form-container">
-            <input
-              class="modal-form-input lastname create"
-              required 
-              type="text"
-              id="tel"
-              name="user-tel"
-              placeholder=" "
-            />
-            <label class="modal-label" for="tel">Фамилия</label>
-            
-          </div>
-          <div class="modal-form-container ">
-            <input
-              class="modal-form-input number create"
-              type="text"
-              id="number"
-              name="user-number"
-              placeholder=" "
-            />
-            <label class="modal-label" for="email">Номер телефона</label>
-            
-          </div>
-            <div class="modal-form-container ">
-            <input
-              class="modal-form-input email create"
-              type="text"
-              id="email"
-              name="user-email"
-              placeholder=" "
-            />
-            <label class="modal-label" for="email">Почта</label>
-            
-          </div>      
-          <button class="modal-btn-submit create" type="button">Сохранить</button>
-          <button type="button" class="close-btn create" ><i class="material-icons color-blue">clear</i></button>
-         
-        </form>
-      </div>
-      </div>
-      <div class="statement-backdrop hidden-statement hidden">
+        </div>
+        <div class="statement-backdrop hidden-statement hidden">
           <div class="statement">
-          <p class="statement__title">Вы действитель хотите выйти?</p>
-          <div class="statement__wrapper">
-          <button type="button" class="statement__btn-yes clear">Да</button>
-          <!-- <button type="button" class="statement__btn-yes clear">Да</button> -->
-          <button type="button" class="statement__btn-no">Нет</button>
+            <p class="statement__title">Вы действитель хотите выйти?</p>
+            <div class="statement__wrapper">
+              <button type="button" class="statement__btn-yes clear">Да</button>
+              <!-- <button type="button" class="statement__btn-yes clear">Да</button> -->
+              <button type="button" class="statement__btn-no">Нет</button>
+            </div>
+          </div>
         </div>
-      </div>
-      </div>
-     
-      <div class="statement-backdrop-clear hidden-statement hidden">
-          <div class="statement">
-          <p class="statement__title clear">Вы действитель хотите выйти?</p>
-          <div class="statement__wrapper">
-          <button type="button" class="statement__btn-yes-clear">Да</button>
-          <!-- <button type="button" class="statement__btn-yes clear">Да</button> -->
-          <button type="button" class="statement__btn-no-clear">Нет</button>
-        </div>
-      </div>
-      </div>
 
-    </div>
-   </main>
-   <footer></footer>
-    
+        <div class="statement-backdrop-clear hidden-statement hidden">
+          <div class="statement">
+            <p class="statement__title clear">Вы действитель хотите выйти?</p>
+            <div class="statement__wrapper">
+              <button type="button" class="statement__btn-yes-clear">Да</button>
+              <!-- <button type="button" class="statement__btn-yes clear">Да</button> -->
+              <button type="button" class="statement__btn-no-clear">Нет</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer></footer>
   </body>
 </html>
